@@ -9,6 +9,9 @@ const InputStyle = css`
   border: 1px solid #8e8e8e;
   border-radius: 50px;
   padding: 1rem;
+  @media screen and (max-width: 870px) {
+    width: 100%;
+  }
 `;
 
 type InputProps = {

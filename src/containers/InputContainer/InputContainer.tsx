@@ -3,13 +3,17 @@ import { Input } from '../../components';
 import { css } from '@emotion/react';
 import { useMutation } from '@apollo/client';
 import GET_ANI from '../../queries/getAni.queries';
+import * as I from '../../assets';
 
 const Positioner = css`
   width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 7rem;
+  padding: 5rem;
+  flex-direction: column;
+  svg {
+    margin-bottom: 5rem;
+  }
 `;
 
 const InputContainer = () => {
@@ -22,6 +26,7 @@ const InputContainer = () => {
   };
   return (
     <div css={Positioner}>
+      <I.ssipduck />
       <Input
         onChange={(e) => setSearchValue(e.target.value)}
         onKeyDown={handleKeyDown}

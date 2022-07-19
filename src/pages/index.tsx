@@ -6,7 +6,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>SsipDuck</title>
+        <title>씹덕</title>
       </Head>
       <InputContainer />
       <CardContainer />
