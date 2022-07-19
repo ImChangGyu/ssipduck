@@ -51,7 +51,7 @@ const Positioner = css`
   display: grid;
   margin-bottom: 5rem;
   padding: 0 5rem;
-  gap: 2rem;
+  gap: 5rem;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
   @media screen and (max-width: 1630px) {

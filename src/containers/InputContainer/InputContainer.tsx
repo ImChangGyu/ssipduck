@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Input } from '../../components';
 import { css } from '@emotion/react';
-import { useMutation } from '@apollo/client';
-import GET_ANI from '../../queries/getAni.queries';
 import * as I from '../../assets';
 
 const Positioner = css`
@@ -25,13 +23,13 @@ const InputContainer = () => {
     }
   };
   return (
-    <div css={Positioner}>
+    <header css={Positioner}>
       <I.ssipduck />
       <Input
         onChange={(e) => setSearchValue(e.target.value)}
         onKeyDown={handleKeyDown}
       />
-    </div>
+    </header>
   );
 };
 

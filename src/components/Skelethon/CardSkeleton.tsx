@@ -37,13 +37,14 @@ const Title = css`
   width: 100%;
   height: 20px;
   background-color: #f2f2f2;
-  font-weight: bold;
+  margin-bottom: 1rem;
 `;
 
 const Description = css`
   width: 100%;
   height: 50px;
   background-color: #f2f2f2;
+  margin-bottom: 1rem;
 `;
 
 const Tag = css`

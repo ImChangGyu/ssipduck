@@ -7,7 +7,7 @@ const ExplainContainer = css`
   width: 350px;
   height: 500px;
   position: relative;
-  box-shadow: 3px 3px 13px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease-out;
   &:hover {
     transform: scale(1.05);
@@ -30,11 +30,13 @@ const ImageCss = css`
 const Title = css`
   font-size: 18px;
   font-weight: bold;
+  margin-bottom: 1rem;
 `;
 
 const Description = css`
   font-size: 13px;
   color: #7a7a7a;
+  margin-bottom: 1rem;
 
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -70,8 +72,8 @@ const Card: React.FC<CardProps> = ({
         css={ImageCss}
       />
       <div css={Explain}>
-        <span css={Title}>{titleNative}</span>
-        <p css={Description}>{description}</p>
+        <div css={Title}>{titleNative}</div>
+        <div css={Description}>{description}</div>
         <div css={TagWrapper}>
           {genres.map((genre, index) => (
             <GenreTag key={index}>{genre}</GenreTag>
