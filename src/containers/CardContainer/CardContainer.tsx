@@ -1,49 +1,14 @@
 import React, { useState } from 'react';
-import { Card, CardSkeleton } from '../../components';
+import { Card, CardSkeleton, Pagenation } from '../../components';
 import { useQuery } from '@apollo/client';
 import GET_ANI from '../../queries/getAni.queries';
 import { css } from '@emotion/react';
+import { AniType } from '../../types/Ani.type';
 
 const MockData = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6,
   7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0,
 ];
-
-export type AniType = {
-  Page: {
-    media: [
-      {
-        coverImage: { __typename: string; extraLarge: string };
-        description: string;
-        endDate: {
-          __typename: string;
-          year: number;
-          month: number;
-          day: number;
-        };
-        genres: string[];
-        siteUrl: string;
-        startDate: {
-          __typename: string;
-          yaer: number;
-          month: number;
-          day: number;
-        };
-        studios: {
-          __typename: string;
-          nodes: [
-            {
-              __typename: string;
-              name: string;
-            }
-          ];
-        };
-        title: { __typename: string; english: string; native: string };
-        __typename: string;
-      }
-    ];
-  };
-};
 
 const Positioner = css`
   width: 100%;
@@ -106,30 +71,31 @@ const CardContainer = () => {
   if (loading)
     return (
       <>
-        <div css={Nav}>
-          <span css={NavItem}>{'<'}</span>
-          <span>{count}</span>
-          <span css={NavItem}>{'>'}</span>
-        </div>
+        <Pagenation
+          handleCountDown={() => {}}
+          handleCountUp={() => {}}
+          count={count}
+        />
         <div css={Positioner}>
           {MockData.map((_, index) => (
             <CardSkeleton key={index} />
           ))}
         </div>
+        <Pagenation
+          handleCountDown={() => {}}
+          handleCountUp={() => {}}
+          count={count}
+        />
       </>
     );
 
   return (
     <>
-      <div css={Nav}>
-        <span css={NavItem} onClick={handleCountDown}>
-          {'<'}
-        </span>
-        <span>{count}</span>
-        <span css={NavItem} onClick={handleCountUp}>
-          {'>'}
-        </span>
-      </div>
+      <Pagenation
+        handleCountDown={handleCountDown}
+        handleCountUp={handleCountUp}
+        count={count}
+      />
       <section css={Positioner}>
         {Anime?.Page.media.map((ani, index) => (
           <Card
@@ -141,15 +107,11 @@ const CardContainer = () => {
           />
         ))}
       </section>
-      <div css={Nav}>
-        <span css={NavItem} onClick={handleCountDown}>
-          {'<'}
-        </span>
-        <span>{count}</span>
-        <span css={NavItem} onClick={handleCountUp}>
-          {'>'}
-        </span>
-      </div>
+      <Pagenation
+        handleCountDown={handleCountDown}
+        handleCountUp={handleCountUp}
+        count={count}
+      />
     </>
   );
 };
