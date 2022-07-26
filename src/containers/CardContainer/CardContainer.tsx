@@ -6,6 +6,7 @@ import { css } from '@emotion/react';
 import { AniType } from '../../types/Ani.type';
 import { searchValueAtom } from '../../atoms/Atom';
 import { useAtomValue } from 'jotai';
+import * as I from '../../assets';
 
 const MockData = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6,
@@ -33,18 +34,19 @@ const Positioner = css`
   }
 `;
 
-const Nav = css`
+const NotFound = css`
   width: 100%;
+  height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding-bottom: 3rem;
-  gap: 1rem;
-  font-size: 18px;
+  align-items: center;
 `;
 
-const NavItem = css`
-  cursor: pointer;
-  user-select: none;
+const NotFoundDesc = css`
+  font-size: 20px;
+  padding-top: 2rem;
+  color: #d9d9d9;
 `;
 
 const CardContainer = () => {
@@ -106,6 +108,14 @@ const CardContainer = () => {
         />
       </>
     );
+  if (!Anime) return;
+  if (Anime.Page.media.toString() === '')
+    return (
+      <div css={NotFound}>
+        <I.warning />
+        <p css={NotFoundDesc}>해당 검색어의 애니를 찾을 수 없어요!</p>
+      </div>
+    );
 
   return (
     <>
@@ -117,7 +127,7 @@ const CardContainer = () => {
         />
       )}
       <section css={Positioner}>
-        {Anime?.Page.media.map((ani, index) => (
+        {Anime.Page.media.map((ani, index) => (
           <Card
             key={index}
             genres={ani.genres}
