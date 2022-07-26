@@ -9,6 +9,11 @@ const InputStyle = css`
   border: 1px solid #8e8e8e;
   border-radius: 50px;
   padding: 1rem;
+
+  &:focus::placeholder {
+    color: transparent;
+  }
+
   @media screen and (max-width: 870px) {
     width: 100%;
   }
@@ -16,17 +21,17 @@ const InputStyle = css`
 
 type InputProps = {
   onChange: (e: any) => void;
-  onKeyDown: (e: any) => void;
+  value: string;
 };
 
-const Input: React.FC<InputProps> = ({ onKeyDown, onChange }) => {
+const Input: React.FC<InputProps> = ({ onChange, value }) => {
   return (
     <input
       type="text"
       css={InputStyle}
-      placeholder="Searching..."
+      placeholder="Searching ..."
       onChange={onChange}
-      onKeyDown={onKeyDown}
+      value={value}
     />
   );
 };

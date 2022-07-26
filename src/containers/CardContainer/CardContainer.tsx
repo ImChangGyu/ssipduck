@@ -4,6 +4,8 @@ import { useQuery } from '@apollo/client';
 import GET_ANI from '../../queries/getAni.queries';
 import { css } from '@emotion/react';
 import { AniType } from '../../types/Ani.type';
+import { searchValueAtom } from '../../atoms/Atom';
+import { useAtomValue } from 'jotai';
 
 const MockData = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6,
@@ -27,6 +29,7 @@ const Positioner = css`
   }
   @media screen and (max-width: 870px) {
     grid-template-columns: repeat(1, 1fr);
+    padding: 0;
   }
 `;
 
@@ -46,26 +49,41 @@ const NavItem = css`
 
 const CardContainer = () => {
   const [count, setCount] = useState<number>(1);
+  const searchValue = useAtomValue(searchValueAtom);
 
   const {
     loading,
     error,
     data: Anime,
-  } = useQuery<AniType>(GET_ANI, {
-    variables: {
-      page: count,
-      isAdult: false,
-      type: 'ANIME',
-      sort: 'POPULARITY_DESC',
-    },
-  });
+  } = useQuery<AniType>(
+    GET_ANI,
+    searchValue === ''
+      ? {
+          variables: {
+            page: count,
+            isAdult: false,
+            type: 'ANIME',
+            sort: 'POPULARITY_DESC',
+          },
+        }
+      : {
+          variables: {
+            isAdult: false,
+            type: 'ANIME',
+            sort: 'POPULARITY_DESC',
+            search: searchValue,
+          },
+        }
+  );
 
   const handleCountUp = () => {
     setCount((prev) => prev + 1);
+    window.scrollTo(0, 0);
   };
 
   const handleCountDown = () => {
     setCount((prev) => (prev === 1 ? prev : prev - 1));
+    window.scrollTo(0, 0);
   };
 
   if (loading)
@@ -91,11 +109,13 @@ const CardContainer = () => {
 
   return (
     <>
-      <Pagenation
-        handleCountDown={handleCountDown}
-        handleCountUp={handleCountUp}
-        count={count}
-      />
+      {searchValue === '' && (
+        <Pagenation
+          handleCountDown={handleCountDown}
+          handleCountUp={handleCountUp}
+          count={count}
+        />
+      )}
       <section css={Positioner}>
         {Anime?.Page.media.map((ani, index) => (
           <Card
@@ -103,15 +123,18 @@ const CardContainer = () => {
             genres={ani.genres}
             imageUrl={ani.coverImage.extraLarge}
             titleNative={ani.title.native}
+            titleRomaji={ani.title.romaji}
             description={ani.description}
           />
         ))}
       </section>
-      <Pagenation
-        handleCountDown={handleCountDown}
-        handleCountUp={handleCountUp}
-        count={count}
-      />
+      {searchValue === '' && (
+        <Pagenation
+          handleCountDown={handleCountDown}
+          handleCountUp={handleCountUp}
+          count={count}
+        />
+      )}
     </>
   );
 };
