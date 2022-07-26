@@ -41,6 +41,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.19.0"],\
             ["eslint-config-next", "virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:12.2.0"],\
             ["graphql", "npm:16.5.0"],\
+            ["jotai", "virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:1.7.5"],\
             ["next", "virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:12.2.0"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:18.2.0"],\
@@ -2325,6 +2326,64 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["jotai", [\
+        ["npm:1.7.5", {\
+          "packageLocation": "./.yarn/cache/jotai-npm-1.7.5-7c758fdad9-eb9db8a6e8.zip/node_modules/jotai/",\
+          "packageDependencies": [\
+            ["jotai", "npm:1.7.5"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:1.7.5", {\
+          "packageLocation": "./.yarn/__virtual__/jotai-virtual-d5c145166c/0/cache/jotai-npm-1.7.5-7c758fdad9-eb9db8a6e8.zip/node_modules/jotai/",\
+          "packageDependencies": [\
+            ["jotai", "virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:1.7.5"],\
+            ["@babel/core", null],\
+            ["@babel/template", null],\
+            ["@types/babel__core", null],\
+            ["@types/babel__template", null],\
+            ["@types/immer", null],\
+            ["@types/optics-ts", null],\
+            ["@types/react", "npm:18.0.15"],\
+            ["@types/react-query", null],\
+            ["@types/urql__core", null],\
+            ["@types/valtio", null],\
+            ["@types/wonka", null],\
+            ["@types/xstate", null],\
+            ["@urql/core", null],\
+            ["immer", null],\
+            ["optics-ts", null],\
+            ["react", "npm:18.2.0"],\
+            ["react-query", null],\
+            ["valtio", null],\
+            ["wonka", null],\
+            ["xstate", null]\
+          ],\
+          "packagePeers": [\
+            "@babel/core",\
+            "@babel/template",\
+            "@types/babel__core",\
+            "@types/babel__template",\
+            "@types/immer",\
+            "@types/optics-ts",\
+            "@types/react-query",\
+            "@types/react",\
+            "@types/urql__core",\
+            "@types/valtio",\
+            "@types/wonka",\
+            "@types/xstate",\
+            "@urql/core",\
+            "immer",\
+            "optics-ts",\
+            "react-query",\
+            "react",\
+            "valtio",\
+            "wonka",\
+            "xstate"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["js-tokens", [\
         ["npm:4.0.0", {\
           "packageLocation": "./.yarn/cache/js-tokens-npm-4.0.0-0ac852e9e2-8a95213a5a.zip/node_modules/js-tokens/",\
@@ -3137,6 +3196,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.19.0"],\
             ["eslint-config-next", "virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:12.2.0"],\
             ["graphql", "npm:16.5.0"],\
+            ["jotai", "virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:1.7.5"],\
             ["next", "virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:12.2.0"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:144a223cb5b9f1889664604332713a306f6e3a95db86cedf0fa18acc63a5ff9a2e7768a955ea6694073369aae2da7245ae2739249f9dff7b2d80d1d557a707e1#npm:18.2.0"],\

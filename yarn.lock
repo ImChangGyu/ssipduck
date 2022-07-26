@@ -1800,6 +1800,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jotai@npm:^1.7.5":
+  version: 1.7.5
+  resolution: "jotai@npm:1.7.5"
+  peerDependencies:
+    "@babel/core": "*"
+    "@babel/template": "*"
+    "@urql/core": "*"
+    immer: "*"
+    optics-ts: "*"
+    react: ">=16.8"
+    react-query: "*"
+    valtio: "*"
+    wonka: "*"
+    xstate: "*"
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@babel/template":
+      optional: true
+    "@urql/core":
+      optional: true
+    immer:
+      optional: true
+    optics-ts:
+      optional: true
+    react-query:
+      optional: true
+    valtio:
+      optional: true
+    wonka:
+      optional: true
+    xstate:
+      optional: true
+  checksum: eb9db8a6e88489f7b4fe1775aa3dedefafb37a62dd53eea783c6d66402e397296b6aae4e0ee9748410cebcdd4ee73d1b6781d547ebdeb883de00415d3a7adb60
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -2551,6 +2588,7 @@ __metadata:
     eslint: 8.19.0
     eslint-config-next: 12.2.0
     graphql: ^16.5.0
+    jotai: ^1.7.5
     next: 12.2.0
     react: 18.2.0
     react-dom: 18.2.0

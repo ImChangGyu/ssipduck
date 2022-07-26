@@ -12,6 +12,7 @@
     "@apollo/client": "^3.6.9",
     "@emotion/react": "^11.9.3",
     "graphql": "^16.5.0",
+    "jotai": "^1.7.5",
     "next": "12.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
