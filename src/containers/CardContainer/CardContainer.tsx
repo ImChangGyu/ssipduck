@@ -108,7 +108,7 @@ const CardContainer = () => {
         />
       </>
     );
-  if (!Anime) return;
+  if (!Anime) return <div />;
   if (Anime.Page.media.toString() === '')
     return (
       <div css={NotFound}>
