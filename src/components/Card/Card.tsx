@@ -28,9 +28,8 @@ const ImageCss = css`
 `;
 
 const Title = css`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  margin-bottom: 1rem;
 `;
 
 const Description = css`
@@ -49,11 +48,23 @@ const TagWrapper = css`
   grid-template-columns: repeat(auto-fill, minmax(30%, auto));
 `;
 
+const TitleWrapper = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+const RomajiTitle = css`
+  font-size: 11px;
+  color: #aaaaaa;
+  margin-bottom: 1rem;
+`;
+
 interface CardProps {
   imageUrl: string;
   titleNative: string;
   description: string;
   genres: string[];
+  titleRomaji: string;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -61,6 +72,7 @@ const Card: React.FC<CardProps> = ({
   titleNative,
   description,
   genres,
+  titleRomaji,
 }) => {
   return (
     <div css={ExplainContainer}>
@@ -72,12 +84,17 @@ const Card: React.FC<CardProps> = ({
         css={ImageCss}
       />
       <div css={Explain}>
-        <div css={Title}>{titleNative}</div>
+        <div css={TitleWrapper}>
+          <div css={Title}>{titleNative}</div>
+          <div css={RomajiTitle}>{titleRomaji}</div>
+        </div>
         <div css={Description}>{description}</div>
         <div css={TagWrapper}>
-          {genres.map((genre, index) => (
-            <GenreTag key={index}>{genre}</GenreTag>
-          ))}
+          {genres.map((genre, index) => {
+            if (index < 3) {
+              return <GenreTag key={index}>{genre}</GenreTag>;
+            }
+          })}
         </div>
       </div>
     </div>
