@@ -27,7 +27,11 @@ export type AniType = {
             }
           ];
         };
-        title: { __typename: string; english: string; native: string };
+        title: {
+          __typename: string;
+          native: string;
+          romaji: string;
+        };
         __typename: string;
       }
     ];

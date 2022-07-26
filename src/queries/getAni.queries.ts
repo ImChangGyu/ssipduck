@@ -12,7 +12,7 @@ export default gql`
       media(isAdult: $isAdult, type: $type, sort: $sort, search: $search) {
         siteUrl
         title {
-          english
+          romaji
           native
         }
         description
