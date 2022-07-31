@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Card, CardSkeleton, Pagenation } from '../../components';
+import { Card, CardSkeleton, Pagenation, Selector } from 'components';
 import { useQuery } from '@apollo/client';
-import GET_ANI from '../../queries/getAni.queries';
+import GET_ANI from 'queries/getAni.queries';
 import { css } from '@emotion/react';
-import { AniType } from '../../types/Ani.type';
-import { searchValueAtom } from '../../atoms/Atom';
-import { useAtomValue } from 'jotai';
-import * as I from '../../assets';
+import { AniType } from 'types/Ani.type';
+import { searchValueAtom, selectorValueAtom } from 'atoms/Atom';
+import { useAtom, useAtomValue } from 'jotai';
+import * as I from 'assets';
 
-const MockData = [
+const MockData: readonly number[] = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6,
   7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0,
 ];
@@ -52,6 +52,7 @@ const NotFoundDesc = css`
 const CardContainer = () => {
   const [count, setCount] = useState<number>(1);
   const searchValue = useAtomValue(searchValueAtom);
+  const selectorValue = useAtomValue(selectorValueAtom);
 
   const {
     loading,
@@ -65,14 +66,14 @@ const CardContainer = () => {
             page: count,
             isAdult: false,
             type: 'ANIME',
-            sort: 'POPULARITY_DESC',
+            sort: selectorValue,
           },
         }
       : {
           variables: {
             isAdult: false,
             type: 'ANIME',
-            sort: 'POPULARITY_DESC',
+            sort: selectorValue,
             search: searchValue,
           },
         }
@@ -126,6 +127,7 @@ const CardContainer = () => {
           count={count}
         />
       )}
+
       <section css={Positioner}>
         {Anime.Page.media.map((ani, index) => (
           <Card
