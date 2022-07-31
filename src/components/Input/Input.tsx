@@ -24,7 +24,7 @@ type InputProps = {
   value: string;
 };
 
-const Input: React.FC<InputProps> = ({ onChange, value }) => {
+const Input = ({ onChange, value }: InputProps) => {
   return (
     <input
       type="text"

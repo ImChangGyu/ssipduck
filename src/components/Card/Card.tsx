@@ -59,21 +59,21 @@ const RomajiTitle = css`
   margin-bottom: 1rem;
 `;
 
-interface CardProps {
+type CardProps = {
   imageUrl: string;
   titleNative: string;
   description: string;
   genres: string[];
   titleRomaji: string;
-}
+};
 
-const Card: React.FC<CardProps> = ({
+const Card = ({
   imageUrl,
   titleNative,
   description,
   genres,
   titleRomaji,
-}) => {
+}: CardProps) => {
   return (
     <div css={ExplainContainer}>
       <Image

@@ -1,11 +1,11 @@
 import React from 'react';
 import { css } from '@emotion/react';
 
-interface PagenationBarProps {
+type PagenationBarProps = {
   handleCountDown: () => void;
   handleCountUp: () => void;
   count: number;
-}
+};
 
 const Nav = css`
   width: 100%;
@@ -21,11 +21,11 @@ const NavItem = css`
   user-select: none;
 `;
 
-const PagenationBar: React.FC<PagenationBarProps> = ({
+const PagenationBar = ({
   handleCountDown,
   handleCountUp,
   count,
-}) => {
+}: PagenationBarProps) => {
   return (
     <div css={Nav}>
       <span css={NavItem} onClick={handleCountDown}>
