@@ -56,22 +56,14 @@ const Tag = css`
   margin-bottom: 0.25rem;
 `;
 
-const TagWrapper = css``;
-
 const CardSkeleton = () => {
-  const returnTag = () => {
-    for (let i = 0; i < 6; i++) {
-      return <div css={Tag} />;
-    }
-  };
-
   return (
     <div css={ExplainContainer}>
       <div css={ImageCss}></div>
       <div css={Explain}>
         <div css={Title}></div>
         <p css={Description}></p>
-        <div css={TagWrapper}>
+        <div>
           <div css={Tag} />
           <div css={Tag} />
         </div>
