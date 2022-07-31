@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { CardContainer, InputContainer } from '../containers';
+import { CardContainer, InputContainer } from 'containers';
 
 const Home: NextPage = () => {
   return (
