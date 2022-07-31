@@ -15,9 +15,6 @@ const Positioner = css`
   svg {
     margin-bottom: 5rem;
   }
-  input {
-    margin-bottom: 5rem;
-  }
 `;
 
 const SelectorWrapper = css`
@@ -34,6 +31,7 @@ const SelectorWrapper = css`
     position: relative;
     top: 0;
     left: 0;
+    margin-top: 5rem;
   }
 `;
 
