@@ -11,7 +11,10 @@ const Home: NextPage = () => {
         <meta property="og:title" content="씹덕" />
         <meta property="op:type" content="website" />
         <meta property="og:url" content="https://ssipduck.vercel.app/" />
-        <meta property="og:image" content="https://ibb.co/Fm89Dgq" />
+        <meta
+          property="og:image"
+          content="https://i.ibb.co/LY9MZnh/ssipduck.png"
+        />
       </Head>
       <InputContainer />
       <CardContainer />
