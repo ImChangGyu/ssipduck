@@ -15,6 +15,10 @@ const Home: NextPage = () => {
           property="og:image"
           content="https://i.ibb.co/LY9MZnh/ssipduck.png"
         />
+        <meta
+          name="google-site-verification"
+          content="o0LSiUYUh_txjvTvbLp-fnLi9cws0linvlyU4_x5PCQ"
+        />
       </Head>
       <InputContainer />
       <CardContainer />
