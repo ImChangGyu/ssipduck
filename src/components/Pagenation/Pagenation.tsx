@@ -2,8 +2,8 @@ import React from 'react';
 import { css } from '@emotion/react';
 
 type PagenationBarProps = {
-  handleCountDown: () => void;
-  handleCountUp: () => void;
+  handleCountDown?: () => void;
+  handleCountUp?: () => void;
   count: number;
 };
 
@@ -27,7 +27,7 @@ const PagenationBar = ({
   count,
 }: PagenationBarProps) => {
   return (
-    <div css={Nav}>
+    <nav css={Nav}>
       <span css={NavItem} onClick={handleCountDown}>
         {'<'}
       </span>
@@ -35,7 +35,7 @@ const PagenationBar = ({
       <span css={NavItem} onClick={handleCountUp}>
         {'>'}
       </span>
-    </div>
+    </nav>
   );
 };
 
