@@ -3,7 +3,7 @@ import { Card, CardSkeleton, Pagenation, Selector } from 'components';
 import { useQuery } from '@apollo/client';
 import GET_ANI from 'queries/getAni.queries';
 import { css } from '@emotion/react';
-import { AniType } from 'types/Ani.type';
+import { type AniType } from 'types/Ani.type';
 import { searchValueAtom, selectorValueAtom } from 'atoms/Atom';
 import { useAtom, useAtomValue } from 'jotai';
 import * as I from 'assets';
@@ -92,21 +92,13 @@ const CardContainer = () => {
   if (loading)
     return (
       <>
-        <Pagenation
-          handleCountDown={() => {}}
-          handleCountUp={() => {}}
-          count={count}
-        />
+        <Pagenation count={count} />
         <div css={Positioner}>
           {MockData.map((_, index) => (
             <CardSkeleton key={index} />
           ))}
         </div>
-        <Pagenation
-          handleCountDown={() => {}}
-          handleCountUp={() => {}}
-          count={count}
-        />
+        <Pagenation count={count} />
       </>
     );
   if (!Anime) return <div />;
