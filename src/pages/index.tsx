@@ -1,29 +1,32 @@
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import { CardContainer, InputContainer } from 'containers';
+import type { GetServerSideProps, NextPage } from 'next';
+import { CardContainer } from 'containers';
+import GET_ANI from 'queries/getAni.queries';
+import { initializeApollo } from 'lib/apollo';
+import { useQuery } from '@apollo/client';
 
-const Home: NextPage = () => {
-  return (
-    <div>
-      <Head>
-        <title>씹덕</title>
-        <meta name="description" content="씹덕들을 위한 애니메이션 리스트!" />
-        <meta property="og:title" content="씹덕" />
-        <meta property="op:type" content="website" />
-        <meta property="og:url" content="https://ssipduck.vercel.app/" />
-        <meta
-          property="og:image"
-          content="https://i.ibb.co/LY9MZnh/ssipduck.png"
-        />
-        <meta
-          name="google-site-verification"
-          content="o0LSiUYUh_txjvTvbLp-fnLi9cws0linvlyU4_x5PCQ"
-        />
-      </Head>
-      <InputContainer />
-      <CardContainer />
-    </div>
-  );
+const variables = {
+  page: 1,
+  isAdult: false,
+  type: 'ANIME',
+  sort: 'POPULARITY_DESC',
 };
 
-export default Home;
+export default function Home() {
+  const { data } = useQuery(GET_ANI, { variables });
+
+  return (
+    <>
+      <CardContainer aniList={data?.Page.media} />
+    </>
+  );
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query<any>({ query: GET_ANI, variables });
+
+  return {
+    props: { initialApolloState: apolloClient.cache.extract() },
+  };
+};

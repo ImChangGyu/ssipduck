@@ -24,3 +24,5 @@ export function updateSelectorValue(
 
   return selectorValue as WritableAtom<string, string | undefined>;
 }
+
+export const NavListValue = atom<string>('All');

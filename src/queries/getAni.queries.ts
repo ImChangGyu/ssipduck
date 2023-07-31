@@ -6,32 +6,26 @@ export default gql`
     $isAdult: Boolean
     $type: MediaType
     $sort: [MediaSort]
+    $format: MediaFormat
     $search: String
+    $season: MediaSeason
+    $seasonYear: Int
   ) {
     Page(page: $page) {
-      media(isAdult: $isAdult, type: $type, sort: $sort, search: $search) {
-        siteUrl
+      media(
+        isAdult: $isAdult
+        type: $type
+        sort: $sort
+        format: $format
+        search: $search
+        season: $season
+        seasonYear: $seasonYear
+      ) {
         title {
           romaji
-          native
         }
         description
         genres
-        studios {
-          nodes {
-            name
-          }
-        }
-        startDate {
-          year
-          month
-          day
-        }
-        endDate {
-          year
-          month
-          day
-        }
         coverImage {
           extraLarge
         }

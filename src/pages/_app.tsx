@@ -1,18 +1,22 @@
 import type { AppProps } from 'next/app';
-import { ApolloProvider } from '@apollo/client';
-import client from '../lib/apollo';
 import GlobalStyle from '../styles/GlobalStyle';
 import { Provider } from 'jotai';
+import { useApollo } from '../lib/apollo';
+import { Header } from 'components';
+import { ApolloProvider } from '@apollo/client';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const apolloClient = useApollo(pageProps);
+
   return (
     <>
       <GlobalStyle />
-      <ApolloProvider client={client}>
-        <Provider>
+      <Provider>
+        <ApolloProvider client={apolloClient}>
+          <Header />
           <Component {...pageProps} />
-        </Provider>
-      </ApolloProvider>
+        </ApolloProvider>
+      </Provider>
     </>
   );
 }
