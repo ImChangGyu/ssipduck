@@ -18,6 +18,12 @@ const config: Config = {
       gridTemplateColumns: {
         list: 'repeat(auto-fill, minmax(320px, 1fr))',
       },
+      keyframes: {
+        skeleton: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.4' },
+        },
+      },
     },
     screens: {
       md: { max: '768px' },
