@@ -4,6 +4,7 @@ import { useAniList } from '~/features/ani/api/get-ani-list';
 import FavoriteAni from '~/features/ani/components/favorite-ani';
 import Image from 'next/image';
 import { VariableType } from '~/types/ani';
+import { stripTag } from '~/utils/formatter';
 
 interface AniListProps {
   variableType: VariableType;
@@ -20,7 +21,7 @@ export default function AniList({ variableType }: AniListProps) {
     <div className="w-full h-full grid gap-[24px] grid-cols-list mb-[5px] px-[3%] py-[20px] md:px-[5%] justify-items-center">
       {aniList.map((ani) => (
         <div
-          key={ani.id}
+          key={`ani-item_${ani.id}`}
           className="w-full h-[360px] flex flex-col gap-4 p-6 bg-white border border-transparent rounded-2xl shadow-item hover:border-primary hover:shadow-hover_shadow_color"
         >
           <Image
@@ -41,7 +42,7 @@ export default function AniList({ variableType }: AniListProps) {
                 <FavoriteAni />
               </div>
               <div className="text-gray_description text-sm mb-4 line-clamp-3">
-                {ani.description}
+                {stripTag(ani.description)}
               </div>
             </div>
             <div className="w-full flex gap-2 line-clamp-1">
