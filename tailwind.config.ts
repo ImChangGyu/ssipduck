@@ -1,12 +1,28 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {},
-  plugins: [],
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#4f92f6',
+        primary_darken: '#0C2A56',
+        gray_description: '#999',
+        hover_shadow_color: 'rgba(79, 146, 246, 0.2)',
+        gray_scale_100: '#D7D7D7',
+      },
+      boxShadow: {
+        item: '0px 8px 24px 0px #eff1f4',
+        input: '0px 8px 24px 4px #EFF1F4',
+      },
+      gridTemplateColumns: {
+        list: 'repeat(auto-fill, minmax(320px, 1fr))',
+      },
+    },
+    screens: {
+      md: { max: '768px' },
+    },
+  },
+  plugins: [require('@tailwindcss/line-clamp')],
 };
 export default config;
