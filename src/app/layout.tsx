@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
+import { DefaultLayout } from '~/components/layout';
+import { ApolloProvider } from '~/lib/apollo-provider';
 
 const poppin = Poppins({
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -31,7 +33,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={poppin.className}>{children}</body>
+      <body className={poppin.className}>
+        <ApolloProvider>
+          <DefaultLayout>{children}</DefaultLayout>
+        </ApolloProvider>
+      </body>
     </html>
   );
 }
