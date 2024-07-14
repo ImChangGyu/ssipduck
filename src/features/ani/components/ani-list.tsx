@@ -39,7 +39,7 @@ export default function AniList({ variableType }: AniListProps) {
                 <div className="w-[90%] text-primary_darken font-bold line-clamp-1">
                   {ani.title.romaji}
                 </div>
-                <FavoriteAni />
+                <FavoriteAni aniId={ani.id} />
               </div>
               <div className="text-gray_description text-sm mb-4 line-clamp-3">
                 {stripTag(ani.description)}
