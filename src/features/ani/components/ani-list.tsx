@@ -8,14 +8,15 @@ import { stripTag } from '~/utils/formatter';
 
 interface AniListProps {
   variableType: VariableType;
+  searchKeyword: string;
 }
 
-export default function AniList({ variableType }: AniListProps) {
+export default function AniList({ variableType, searchKeyword }: AniListProps) {
   const {
     data: {
       Page: { media: aniList },
     },
-  } = useAniList({ variableType });
+  } = useAniList({ variableType, searchKeyword });
 
   return (
     <div className="w-full h-full grid gap-[24px] grid-cols-list mb-[5px] px-[3%] py-[20px] md:px-[5%] justify-items-center">

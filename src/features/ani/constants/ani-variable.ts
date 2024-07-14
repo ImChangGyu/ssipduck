@@ -35,29 +35,30 @@ function getUpcomingVariable() {
   return { upcomingSeason, upcomingYear };
 }
 
-export const ANI_VARIABLES = (page: number) => ({
+const defaultVariables = (page: number, search: string) => ({
+  isAdult: false,
+  type: 'ANIME',
+  page: page,
+  search: search || undefined,
+});
+
+export const ANI_VARIABLES = (page: number, search: string) => ({
   popular() {
     return {
-      page: page,
-      isAdult: false,
-      type: 'ANIME',
+      ...defaultVariables(page, search),
       sort: 'POPULARITY_DESC',
     };
   },
   trend() {
     return {
-      page: page,
-      isAdult: false,
-      type: 'ANIME',
+      ...defaultVariables(page, search),
       sort: ['TRENDING_DESC', 'POPULARITY_DESC'],
     };
   },
   upcoming() {
     const { upcomingSeason, upcomingYear } = getUpcomingVariable();
     return {
-      page: page,
-      isAdult: false,
-      type: 'ANIME',
+      ...defaultVariables(page, search),
       sort: 'POPULARITY_DESC',
       seasonYear: upcomingYear,
       season: upcomingSeason,
@@ -65,9 +66,7 @@ export const ANI_VARIABLES = (page: number) => ({
   },
   movie() {
     return {
-      page: page,
-      isAdult: false,
-      type: 'ANIME',
+      ...defaultVariables(page, search),
       sort: 'POPULARITY_DESC',
       format: 'MOVIE',
     };

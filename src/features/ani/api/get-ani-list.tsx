@@ -39,14 +39,15 @@ const getAniListQuery = gql`
 
 interface AniListProps {
   variableType: VariableType;
+  searchKeyword: string;
 }
 
 interface AniListType {
   Page: { media: AniItemType[] };
 }
 
-export function useAniList({ variableType }: AniListProps) {
+export function useAniList({ variableType, searchKeyword }: AniListProps) {
   return useSuspenseQuery<AniListType>(getAniListQuery, {
-    variables: ANI_VARIABLES(1)[variableType](),
+    variables: ANI_VARIABLES(1, searchKeyword)[variableType](),
   });
 }
