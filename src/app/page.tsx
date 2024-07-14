@@ -1,3 +1,5 @@
+import Ani from '~/features/ani/components/ani';
+
 export default function Home() {
-  return <div>ssipduck</div>;
+  return <Ani />;
 }
