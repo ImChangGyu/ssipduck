@@ -22,9 +22,11 @@ export default function AniList({ variableType, searchKeyword }: AniListProps) {
     fetchMore,
   } = useAniList({ variableType, searchKeyword });
   const { ref } = useInfiniteScroll((page) => {
-    fetchMore({
-      variables: ANI_VARIABLES(page, searchKeyword)[variableType](),
-      updateQuery: getAniListByPage,
+    startTransition(() => {
+      fetchMore({
+        variables: ANI_VARIABLES(page, searchKeyword)[variableType](),
+        updateQuery: getAniListByPage,
+      });
     });
   });
 
