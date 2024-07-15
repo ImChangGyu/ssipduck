@@ -46,6 +46,15 @@ interface AniListType {
   Page: { media: AniItemType[] };
 }
 
+export function getAniListByPage(
+  previousQueryResult: any,
+  { fetchMoreResult }: any
+): AniListType {
+  const newData = fetchMoreResult.Page.media;
+  const oldData = previousQueryResult.Page.media;
+  return { Page: { media: [...oldData, ...newData] } };
+}
+
 export function useAniList({ variableType, searchKeyword }: AniListProps) {
   return useSuspenseQuery<AniListType>(getAniListQuery, {
     variables: ANI_VARIABLES(1, searchKeyword)[variableType](),

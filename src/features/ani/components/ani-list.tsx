@@ -1,10 +1,13 @@
 'use client';
 
-import { useAniList } from '~/features/ani/api/get-ani-list';
+import { getAniListByPage, useAniList } from '~/features/ani/api/get-ani-list';
 import FavoriteAni from '~/features/ani/components/favorite-ani';
 import Image from 'next/image';
 import { VariableType } from '~/types/ani';
 import { stripTag } from '~/utils/formatter';
+import useInfiniteScroll from '~/hooks/useInfiniteScroll';
+import { ANI_VARIABLES } from '~/features/ani/constants/ani-variable';
+import { startTransition } from 'react';
 
 interface AniListProps {
   variableType: VariableType;
@@ -16,7 +19,14 @@ export default function AniList({ variableType, searchKeyword }: AniListProps) {
     data: {
       Page: { media: aniList },
     },
+    fetchMore,
   } = useAniList({ variableType, searchKeyword });
+  const { ref } = useInfiniteScroll((page) => {
+    fetchMore({
+      variables: ANI_VARIABLES(page, searchKeyword)[variableType](),
+      updateQuery: getAniListByPage,
+    });
+  });
 
   return (
     <div className="w-full h-full grid gap-[24px] grid-cols-list mb-[5px] px-[3%] py-[20px] md:px-[5%] justify-items-center">
@@ -59,6 +69,7 @@ export default function AniList({ variableType, searchKeyword }: AniListProps) {
           </div>
         </div>
       ))}
+      <div ref={ref} />
     </div>
   );
 }
