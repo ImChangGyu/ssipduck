@@ -33,8 +33,5 @@ export default function useInfiniteScroll(
     fetchFunction(pageNumber);
   }, [pageNumber]);
 
-  console.log(ref.current);
-  console.log(pageNumber);
-
   return { ref };
 }
