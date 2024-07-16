@@ -21,7 +21,9 @@ export default function AniList({ variableType, searchKeyword }: AniListProps) {
     },
     fetchMore,
   } = useAniList({ variableType, searchKeyword });
+
   const { ref } = useInfiniteScroll((page) => {
+    if (variableType === 'favorite') return;
     startTransition(() => {
       fetchMore({
         variables: ANI_VARIABLES(page, searchKeyword)[variableType](),
@@ -32,9 +34,9 @@ export default function AniList({ variableType, searchKeyword }: AniListProps) {
 
   return (
     <div className="w-full h-full grid gap-[24px] grid-cols-list mb-[5px] px-[3%] py-[20px] md:px-[5%] justify-items-center">
-      {aniList.map((ani) => (
+      {aniList.map((ani, index) => (
         <div
-          key={`ani-item_${ani.id}`}
+          key={`ani-item_${ani.id}_${index}`}
           className="w-full h-[360px] flex flex-col gap-4 p-6 bg-white border border-transparent rounded-2xl shadow-item hover:border-primary hover:shadow-hover_shadow_color"
         >
           <Image

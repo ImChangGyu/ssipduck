@@ -1,4 +1,9 @@
-export type VariableType = 'popular' | 'trend' | 'upcoming' | 'movie';
+export type VariableType =
+  | 'popular'
+  | 'trend'
+  | 'upcoming'
+  | 'movie'
+  | 'favorite';
 
 export interface AniItemType {
   id: number;

@@ -12,6 +12,7 @@ const getAniListQuery = gql`
     $search: String
     $season: MediaSeason
     $seasonYear: Int
+    $id_in: [Int]
   ) {
     Page(page: $page) {
       media(
@@ -22,6 +23,7 @@ const getAniListQuery = gql`
         search: $search
         season: $season
         seasonYear: $seasonYear
+        id_in: $id_in
       ) {
         id
         title {

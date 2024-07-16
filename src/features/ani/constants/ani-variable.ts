@@ -71,4 +71,15 @@ export const ANI_VARIABLES = (page: number, search: string) => ({
       format: 'MOVIE',
     };
   },
+  favorite() {
+    if (typeof window === 'undefined') return { id_in: [] };
+
+    const favoriteAniIdList =
+      JSON.parse(localStorage.getItem('favorite-ani-list') ?? '').state
+        .favoriteAniIdList ?? [];
+
+    return {
+      id_in: favoriteAniIdList,
+    };
+  },
 });
