@@ -1,4 +1,4 @@
-import { useFavoriteAniListStore } from '~/app/store/ani';
+import { useFavoriteAniListStore } from '~/store/ani';
 import * as SVG from '~/assets/svg';
 import { cn } from '~/utils/cn';
 
