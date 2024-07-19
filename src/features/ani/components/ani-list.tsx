@@ -60,7 +60,7 @@ export default function AniList({ variableType, searchKeyword }: AniListProps) {
                 {stripTag(ani.description)}
               </div>
             </div>
-            <div className="w-full flex gap-2 line-clamp-1">
+            <div className="w-full flex gap-2 truncate">
               {ani.genres.map((genre, index) => (
                 <span
                   key={`genre_${index}`}
