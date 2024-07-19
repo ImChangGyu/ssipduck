@@ -38,6 +38,9 @@ importers:
       tailwind-merge:
         specifier: ^2.4.0
         version: 2.4.0
+      tailwind-variants:
+        specifier: ^0.2.1
+        version: 0.2.1(tailwindcss@3.4.4)
       zustand:
         specifier: ^4.5.4
         version: 4.5.4(@types/react@18.3.3)(react@18.3.1)
@@ -1528,6 +1531,12 @@ packages:
 
   tailwind-merge@2.4.0:
     resolution: {integrity: sha512-49AwoOQNKdqKPd9CViyH5wJoSKsCDjUlzL8DxuGp3P1FsGY36NJDAa18jLZcaHAUUuTj+JB8IAo8zWgBNvBF7A==}
+
+  tailwind-variants@0.2.1:
+    resolution: {integrity: sha512-2xmhAf4UIc3PijOUcJPA1LP4AbxhpcHuHM2C26xM0k81r0maAO6uoUSHl3APmvHZcY5cZCY/bYuJdfFa4eGoaw==}
+    engines: {node: '>=16.x', pnpm: '>=7.x'}
+    peerDependencies:
+      tailwindcss: '*'
 
   tailwindcss@3.4.4:
     resolution: {integrity: sha512-ZoyXOdJjISB7/BcLTR6SEsLgKtDStYyYZVLsUtWChO4Ps20CBad7lfJKVDiejocV4ME1hLmyY0WJE3hSDcmQ2A==}
@@ -3350,6 +3359,11 @@ snapshots:
   symbol-observable@4.0.0: {}
 
   tailwind-merge@2.4.0: {}
+
+  tailwind-variants@0.2.1(tailwindcss@3.4.4):
+    dependencies:
+      tailwind-merge: 2.4.0
+      tailwindcss: 3.4.4
 
   tailwindcss@3.4.4:
     dependencies:
