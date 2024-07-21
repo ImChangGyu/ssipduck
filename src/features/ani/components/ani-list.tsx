@@ -11,7 +11,7 @@ import { startTransition } from 'react';
 
 interface AniListProps {
   variableType: VariableType;
-  searchKeyword: string;
+  searchKeyword?: string;
 }
 
 export default function AniList({ variableType, searchKeyword }: AniListProps) {

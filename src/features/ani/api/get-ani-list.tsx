@@ -41,7 +41,7 @@ const getAniListQuery = gql`
 
 interface AniListProps {
   variableType: VariableType;
-  searchKeyword: string;
+  searchKeyword?: string;
 }
 
 interface AniListType {

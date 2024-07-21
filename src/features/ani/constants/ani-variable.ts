@@ -35,14 +35,14 @@ function getUpcomingVariable() {
   return { upcomingSeason, upcomingYear };
 }
 
-const defaultVariables = (page: number, search: string) => ({
+const defaultVariables = (page: number, search?: string) => ({
   isAdult: false,
   type: 'ANIME',
   page: page,
   search: search || undefined,
 });
 
-export const ANI_VARIABLES = (page: number, search: string) => ({
+export const ANI_VARIABLES = (page: number, search?: string) => ({
   popular() {
     return {
       ...defaultVariables(page, search),
