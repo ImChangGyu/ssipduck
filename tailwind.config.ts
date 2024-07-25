@@ -10,6 +10,7 @@ const config: Config = {
         gray_description: '#999',
         hover_shadow_color: 'rgba(79, 146, 246, 0.2)',
         gray_scale_100: '#D7D7D7',
+        blur_background: 'linear-gradient(0deg, #0C2A56, transparent 50%);',
       },
       boxShadow: {
         item: '0px 8px 24px 0px #eff1f4',
