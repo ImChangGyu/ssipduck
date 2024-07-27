@@ -1,3 +1,4 @@
+import { MouseEventHandler } from 'react';
 import { useFavoriteAniListStore } from '~/store/ani';
 import * as SVG from '~/assets/svg';
 import { cn } from '~/utils/cn';
@@ -9,6 +10,12 @@ interface FavoriteAniProps {
 export default function FavoriteAni({ aniId }: FavoriteAniProps) {
   const { favoriteAniIdList, updateFavoriteAniIdList } =
     useFavoriteAniListStore();
+
+  const onFavoriteAniClick: MouseEventHandler<SVGSVGElement> = (event) => {
+    event.stopPropagation();
+    updateFavoriteAniIdList(aniId);
+  };
+
   return (
     <SVG.Star
       className={cn(
@@ -17,7 +24,7 @@ export default function FavoriteAni({ aniId }: FavoriteAniProps) {
           ? 'fill-primary storke-primary'
           : 'fill-white stroke-gray_scale_100'
       )}
-      onClick={() => updateFavoriteAniIdList(aniId)}
+      onClick={onFavoriteAniClick}
     />
   );
 }
