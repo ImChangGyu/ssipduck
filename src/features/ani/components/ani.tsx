@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import AniListSkeleton from '~/components/ui/skeleton/ani-list-skeleton';
 import AniList from '~/features/ani/components/ani-list';
@@ -13,6 +14,8 @@ interface AniProps {
 
 export default function Ani({ variableType }: AniProps) {
   const [searchKeyword, setSearchKeyword] = useState('');
+  const searchparams = useSearchParams();
+  const aniId = searchparams.get('ani-id');
 
   return (
     <>
@@ -20,7 +23,7 @@ export default function Ani({ variableType }: AniProps) {
       <Suspense fallback={<AniListSkeleton />}>
         <AniList variableType={variableType} searchKeyword={searchKeyword} />
       </Suspense>
-      <AniModal />
+      {aniId && <AniModal aniId={aniId} />}
     </>
   );
 }
