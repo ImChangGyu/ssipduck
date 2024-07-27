@@ -32,4 +32,9 @@ export interface AniItemType {
     native: string;
     romaji: string;
   };
+  trailer: {
+    id: string;
+    site: string;
+    thumbnail: string;
+  };
 }
