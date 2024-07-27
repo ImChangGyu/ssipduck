@@ -8,7 +8,7 @@ export default function AniModal() {
   return (
     <div className="fixed flex items-center justify-center inset-0">
       <div className="w-full h-full fixed top-0 left-0 bg-black opacity-70" />
-      <div className="w-[1000px] h-[calc(100vh-100px)] bg-white text-white rounded-lg relative flex flex-col overflow-hidden">
+      <div className="w-[1000px] h-[calc(100vh-100px)] bg-white text-white rounded-lg relative flex flex-col overflow-scroll">
         <div className="w-10 h-10 bg-[#00000055] absolute top-4 right-4 rounded-full flex items-center justify-center z-10 cursor-pointer">
           <SVG.Exit />
         </div>
