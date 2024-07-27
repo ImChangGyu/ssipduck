@@ -1,15 +1,28 @@
+'use client';
+
 import Image from 'next/image';
 import { AniItemType } from '~/types/ani';
 import { stripTag } from '~/utils/formatter';
 import FavoriteAni from '~/features/ani/components/favorite-ani';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface AniItemProps {
   ani: AniItemType;
 }
 
 export default function AniItem({ ani }: AniItemProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const onAniItemClick = () => {
+    router.push(`${pathname}?ani-id=${ani.id}`);
+  };
+
   return (
-    <div className="w-full h-[360px] flex flex-col gap-4 p-6 bg-white border border-transparent rounded-2xl shadow-item hover:border-primary hover:shadow-hover_shadow_color">
+    <div
+      onClick={onAniItemClick}
+      className="w-full h-[360px] flex flex-col gap-4 p-6 bg-white border border-transparent rounded-2xl shadow-item cursor-pointer hover:border-primary hover:shadow-hover_shadow_color"
+    >
       <Image
         src={ani.coverImage.extraLarge}
         width={0}
