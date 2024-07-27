@@ -15,7 +15,9 @@ export default function AniItem({ ani }: AniItemProps) {
   const pathname = usePathname();
 
   const onAniItemClick = () => {
-    router.push(`${pathname}?ani-id=${ani.id}`);
+    router.push(`${pathname}?ani-id=${ani.id}`, {
+      scroll: false,
+    });
   };
 
   return (

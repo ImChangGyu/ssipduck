@@ -22,7 +22,7 @@ export default function AniModal({ aniId }: AniModalProps) {
   } = useGetAniById(aniId);
 
   const onExit = () => {
-    router.push(pathname);
+    router.push(pathname, { scroll: false });
   };
 
   return (
