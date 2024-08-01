@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import AniListSkeleton from '~/components/ui/skeleton/ani-list-skeleton';
+import AniModalSkeleton from '~/components/ui/skeleton/ani-modal-skeleton';
 import AniList from '~/features/ani/components/ani-list';
 import AniModal from '~/features/ani/components/ani-modal';
 import SearchAni from '~/features/ani/components/search-ani';
@@ -23,7 +24,11 @@ export default function Ani({ variableType }: AniProps) {
       <Suspense fallback={<AniListSkeleton />}>
         <AniList variableType={variableType} searchKeyword={searchKeyword} />
       </Suspense>
-      {aniId && <AniModal aniId={aniId} />}
+      {aniId && (
+        <Suspense fallback={<AniModalSkeleton />}>
+          <AniModal aniId={aniId} />
+        </Suspense>
+      )}
     </>
   );
 }
