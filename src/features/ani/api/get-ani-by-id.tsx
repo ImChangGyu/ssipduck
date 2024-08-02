@@ -1,5 +1,5 @@
 import { gql, useSuspenseQuery } from '@apollo/client';
-import { AniItemType } from '~/types/ani';
+import { AniModalItemType } from '~/types/ani';
 
 const getAniByIdQuery = gql`
   query media($id: Int) {
@@ -19,12 +19,28 @@ const getAniByIdQuery = gql`
         site
         thumbnail
       }
+      recommendations(perPage: 6, sort: [RATING_DESC, ID]) {
+        nodes {
+          id
+          mediaRecommendation {
+            id
+            title {
+              romaji
+            }
+            description
+            genres
+            coverImage {
+              extraLarge
+            }
+          }
+        }
+      }
     }
   }
 `;
 
 interface GetAniByIdType {
-  Media: AniItemType;
+  Media: AniModalItemType;
 }
 
 export default function useGetAniById(id: string) {

@@ -18,6 +18,7 @@ const config: Config = {
       },
       gridTemplateColumns: {
         list: 'repeat(auto-fill, minmax(320px, 1fr))',
+        modal_list: 'repeat(auto-fill, minmax(280px, 1fr))',
       },
       keyframes: {
         skeleton: {

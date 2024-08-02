@@ -21,6 +21,8 @@ export default function AniModal({ aniId }: AniModalProps) {
     data: { Media: ani },
   } = useGetAniById(aniId);
 
+  console.log(ani);
+
   const onExit = () => {
     router.push(pathname, { scroll: false });
   };
@@ -38,7 +40,7 @@ export default function AniModal({ aniId }: AniModalProps) {
         <div className="w-full relative">
           <div className="w-full h-[400px]">
             <Player
-              url={trailerUrl(ani.trailer.id ?? '', ani.trailer?.site ?? '')}
+              url={trailerUrl(ani.trailer?.id ?? '', ani.trailer?.site ?? '')}
               placeholderImage={ani.bannerImage ?? ''}
             />
           </div>
@@ -80,7 +82,14 @@ export default function AniModal({ aniId }: AniModalProps) {
           </div>
           <div className="mt-10">
             <h2 className="text-black text-xl font-bold">Recommendation</h2>
-            <div className="w-full h-full grid gap-[24px] grid-cols-list mb-[5px] px-[3%] py-[20px] md:px-[5%] justify-items-center"></div>
+            <div className="w-full h-full grid gap-[24px] grid-cols-modal_list justify-items-center mb-[5px] py-[20px] ">
+              {ani.recommendations.nodes.map((node) => (
+                <AniItem
+                  key={`ani-recommendation-${node.mediaRecommendation.id}`}
+                  ani={node.mediaRecommendation}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
