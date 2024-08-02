@@ -13,6 +13,7 @@ const getAniByIdQuery = gql`
       coverImage {
         extraLarge
       }
+      bannerImage
       trailer {
         id
         site

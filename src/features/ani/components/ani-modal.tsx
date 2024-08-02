@@ -30,19 +30,22 @@ export default function AniModal({ aniId }: AniModalProps) {
       <div className="w-full h-full fixed top-0 left-0 bg-black opacity-70" />
       <div className="w-[1000px] h-[calc(100vh-100px)] bg-white text-white rounded-lg relative flex flex-col overflow-scroll">
         <div
-          className="w-10 h-10 bg-[#00000055] absolute top-4 right-4 rounded-full flex items-center justify-center z-10 cursor-pointer"
+          className="w-10 h-10 bg-[#00000055] absolute top-4 right-4 rounded-full flex items-center justify-center z-20 cursor-pointer"
           onClick={onExit}
         >
           <SVG.Exit />
         </div>
         <div className="w-full relative">
           <div className="w-full h-[400px]">
-            <Player url={trailerUrl(ani.trailer.id, ani.trailer.site)} />
+            <Player
+              url={trailerUrl(ani.trailer.id ?? '', ani.trailer?.site ?? '')}
+              placeholderImage={ani.bannerImage ?? ''}
+            />
           </div>
-          <div className="w-full h-[50px] absolute bottom-0 left-0 bg-gradient-to-t from-white to-transparent" />
+          <div className="w-full h-[50px] absolute bottom-0 left-0 z-20 bg-gradient-to-t from-white to-transparent" />
         </div>
         <div className="flex flex-col p-8">
-          <div className="flex gap-4">
+          <div className="flex gap-4 justify-between">
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold text-primary_darken">

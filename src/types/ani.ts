@@ -8,6 +8,7 @@ export type VariableType =
 export interface AniItemType {
   id: number;
   coverImage: { extraLarge: string };
+  bannerImage: string;
   description: string;
   endDate: {
     year: number;

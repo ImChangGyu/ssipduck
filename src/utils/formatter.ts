@@ -1,6 +1,6 @@
 export function stripTag(string: string) {
   const tagRegex = /<\/?[^>]*>/gi;
-  return string.replaceAll(tagRegex, '');
+  return (string || '').replaceAll(tagRegex, '');
 }
 
 export function trailerUrl(id: string, site: string) {
