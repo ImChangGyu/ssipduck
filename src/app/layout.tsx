@@ -3,6 +3,7 @@ import { Poppins } from 'next/font/google';
 import './globals.css';
 import { DefaultLayout } from '~/components/layout';
 import { ApolloProvider } from '~/lib/apollo-provider';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const poppin = Poppins({
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -36,6 +37,7 @@ export default function RootLayout({
       <body className={poppin.className}>
         <ApolloProvider>
           <DefaultLayout>{children}</DefaultLayout>
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID ?? ''} />
         </ApolloProvider>
       </body>
     </html>
