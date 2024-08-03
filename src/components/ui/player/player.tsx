@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import ReactPlayer from 'react-player';
 import * as SVG from '~/assets/svg';
+import { usePlayerMutedStore } from '~/store/player';
 
 interface PlayerProps {
   url: string;
@@ -11,12 +12,8 @@ interface PlayerProps {
 }
 
 export default function Player({ url, placeholderImage }: PlayerProps) {
-  const [isMute, setIsMute] = useState(true);
+  const { muted, togglePlayerMutedState } = usePlayerMutedStore();
   const [isVideoError, setIsVideoError] = useState(false);
-
-  const onMute = () => {
-    setIsMute((prev) => !prev);
-  };
 
   const playerConfig = useMemo(
     () => ({
@@ -49,7 +46,7 @@ export default function Player({ url, placeholderImage }: PlayerProps) {
             autoPlay={true}
             playing={true}
             loop={true}
-            muted={isMute}
+            muted={muted}
             onError={() => {
               setIsVideoError(true);
             }}
@@ -58,10 +55,10 @@ export default function Player({ url, placeholderImage }: PlayerProps) {
             className="w-full h-full absolute top-0 left-0 z-10"
           />
           <div
-            onClick={onMute}
+            onClick={togglePlayerMutedState}
             className="w-10 h-10 bg-[#00000055] absolute bottom-14 right-4 z-20 rounded-full flex items-center justify-center cursor-pointer"
           >
-            {isMute ? <SVG.Mute /> : <SVG.Speaker />}
+            {muted ? <SVG.Mute /> : <SVG.Speaker />}
           </div>
         </>
       )}
