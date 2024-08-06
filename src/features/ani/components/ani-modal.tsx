@@ -53,7 +53,7 @@ export default function AniModal({ aniId }: AniModalProps) {
                 <h1 className="text-2xl font-bold text-primary_darken">
                   {ani.title.romaji}
                 </h1>
-                <FavoriteAni aniId={160044} />
+                <FavoriteAni aniId={ani.id} />
               </div>
               <div className="w-full text-[#333]">
                 {stripTag(ani.description)}
