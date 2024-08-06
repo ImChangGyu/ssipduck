@@ -19,7 +19,7 @@ export default function FavoriteAni({ aniId }: FavoriteAniProps) {
   return (
     <SVG.Star
       className={cn(
-        'flex-shrink',
+        'flex-shrink cursor-pointer',
         favoriteAniIdList.includes(aniId)
           ? 'fill-primary storke-primary'
           : 'fill-white stroke-gray_scale_100'
