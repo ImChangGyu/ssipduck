@@ -1,4 +1,4 @@
-import Button from '~/components/ui/button/button';
+import { Button } from '~/components/ui/button';
 
 interface AniListErrorProps {
   error: Error;
