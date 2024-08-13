@@ -22,7 +22,7 @@ export default function AniItem({ ani }: AniItemProps) {
   };
 
   return (
-    <LoggerButton event="click_ani_item" value={ani.id}>
+    <LoggerButton event="click" value={ani.id}>
       <div
         onClick={onAniItemClick}
         className="w-full h-[360px] flex flex-col gap-4 p-6 bg-white border border-transparent rounded-2xl shadow-item cursor-pointer hover:border-primary hover:shadow-hover_shadow_color"
