@@ -34,6 +34,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <meta
+          name="google-site-verification"
+          content={process.env.NEXT_PUBLIC_SITE_VERIFICATION_ID}
+        />
+      </head>
       <body className={poppin.className}>
         <ApolloProvider>
           <DefaultLayout>{children}</DefaultLayout>
