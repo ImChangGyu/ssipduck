@@ -82,7 +82,7 @@ export default function AniModal({ aniId }: AniModalProps) {
                 width={0}
                 height={0}
                 sizes="100vw"
-                alt="hello"
+                alt="애니메이션 메인 포스터 이미지"
                 className="w-full"
               />
             </div>
