@@ -1,11 +1,14 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import AniListSkeleton from '~/components/ui/skeleton/ani-list-skeleton';
-import AniModalSkeleton from '~/components/ui/skeleton/ani-modal-skeleton';
+const AniModalSkeleton = dynamic(
+  () => import('~/components/ui/skeleton/ani-modal-skeleton')
+);
 import AniList from '~/features/ani/components/ani-list';
-import AniModal from '~/features/ani/components/ani-modal';
+const AniModal = dynamic(() => import('~/features/ani/components/ani-modal'));
 import SearchAni from '~/features/ani/components/search-ani';
 import { VariableType } from '~/types/ani';
 
