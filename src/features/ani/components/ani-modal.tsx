@@ -3,12 +3,12 @@
 import Player from '~/components/ui/player/player';
 import FavoriteAni from '~/features/ani/components/favorite-ani';
 import * as SVG from '~/assets/svg';
-import AniItem from '~/features/ani/components/ani-item';
 import useGetAniById from '~/features/ani/api/get-ani-by-id';
 import Image from 'next/image';
 import { stripTag, trailerUrl } from '~/utils/formatter';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import AniListWithTitle from '~/features/ani/components/ani-list-with-title';
 
 interface AniModalProps {
   aniId: string;
@@ -87,17 +87,13 @@ export default function AniModal({ aniId }: AniModalProps) {
               />
             </div>
           </div>
-          <div className="mt-10">
-            <h2 className="text-black text-xl font-bold">Recommendation</h2>
-            <div className="w-full h-full grid gap-[24px] grid-cols-modal_list justify-items-center mb-[5px] py-[20px] ">
-              {ani.recommendations.nodes.map((node) => (
-                <AniItem
-                  key={`ani-recommendation-${node.mediaRecommendation.id}`}
-                  ani={node.mediaRecommendation}
-                />
-              ))}
-            </div>
-          </div>
+          <AniListWithTitle title="Series" aniList={ani.relations.nodes} />
+          <AniListWithTitle
+            title="Recommendation"
+            aniList={ani.recommendations.nodes.map(
+              (node) => node.mediaRecommendation
+            )}
+          />
         </div>
       </div>
     </div>

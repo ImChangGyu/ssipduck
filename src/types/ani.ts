@@ -22,6 +22,7 @@ export interface AniItemType {
 }
 
 export interface AniModalItemType extends AniItemType {
+  relations: { nodes: AniItemType[] };
   recommendations: {
     nodes: { id: number; mediaRecommendation: AniItemType }[];
   };

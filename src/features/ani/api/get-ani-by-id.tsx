@@ -19,6 +19,19 @@ const getAniByIdQuery = gql`
         site
         thumbnail
       }
+      relations {
+        nodes {
+          id
+          title {
+            romaji
+          }
+          description
+          genres
+          coverImage {
+            extraLarge
+          }
+        }
+      }
       recommendations(perPage: 6, sort: [RATING_DESC, ID]) {
         nodes {
           id
