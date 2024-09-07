@@ -37,7 +37,7 @@ export default function AniModal({ aniId }: AniModalProps) {
         className="w-full h-full fixed top-0 left-0 bg-black opacity-70"
         onClick={onExit}
       />
-      <div className="w-[1000px] h-[calc(100vh-100px)] bg-white text-white rounded-lg relative flex flex-col overflow-y-scroll no-scrollbar">
+      <div className="w-[1000px] h-[calc(100vh-100px)] bg-white text-white rounded-lg relative flex flex-col overflow-y-scroll no-scrollbar md:h-full md:rounded-none">
         <div
           className="w-10 h-10 bg-[#00000055] absolute top-4 right-4 rounded-full flex items-center justify-center z-20 cursor-pointer"
           onClick={onExit}
@@ -55,7 +55,7 @@ export default function AniModal({ aniId }: AniModalProps) {
         </div>
         <div className="flex flex-col p-8">
           <div className="flex gap-4 justify-between">
-            <div className="flex flex-col gap-4">
+            <div className="w-full flex flex-col gap-4">
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl font-bold text-primary_darken">
                   {ani.title.romaji}
@@ -65,7 +65,7 @@ export default function AniModal({ aniId }: AniModalProps) {
               <div className="w-full text-[#333]">
                 {stripTag(ani.description)}
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 {ani.genres.map((genre, index) => (
                   <span
                     key={`genre_${index}`}
@@ -76,7 +76,7 @@ export default function AniModal({ aniId }: AniModalProps) {
                 ))}
               </div>
             </div>
-            <div className="w-[215px] flex-shrink-0">
+            <div className="w-[215px] flex-shrink-0 md:hidden">
               <Image
                 src={ani.coverImage.extraLarge}
                 width={0}
