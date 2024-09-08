@@ -1,7 +1,6 @@
 import {
   Children,
   PropsWithChildren,
-  cloneElement,
   createElement,
   isValidElement,
 } from 'react';
@@ -19,17 +18,7 @@ export default function LoggerButton({
 }: PropsWithChildren<LoggerButtonProps>) {
   const logger = useLogger();
   if (!isValidElement(children)) return children;
-  //   console.log(
-  //     Children.map(children, (child) =>
-  //       createElement(child.props.children, {
-  //         ...child.props,
-  //         onClick: (...args: any[]) => {
-  //           logger.click({ event, value });
-  //           return child.props.onClick?.(...args);
-  //         },
-  //       })
-  //     )
-  //   );
+
   return Children.map(children, (child) =>
     createElement(
       'div',
