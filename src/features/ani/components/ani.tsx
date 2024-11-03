@@ -7,8 +7,12 @@ import AniListSkeleton from '~/components/ui/skeleton/ani-list-skeleton';
 const AniModalSkeleton = dynamic(
   () => import('~/components/ui/skeleton/ani-modal-skeleton')
 );
-import AniList from '~/features/ani/components/ani-list';
-const AniModal = dynamic(() => import('~/features/ani/components/ani-modal'));
+const AniList = dynamic(() => import('~/features/ani/components/ani-list'), {
+  loading: () => <AniListSkeleton />,
+});
+const AniModal = dynamic(() => import('~/features/ani/components/ani-modal'), {
+  loading: () => <AniModalSkeleton />,
+});
 import SearchAni from '~/features/ani/components/search-ani';
 import { VariableType } from '~/types/ani';
 
@@ -27,11 +31,7 @@ export default function Ani({ variableType }: AniProps) {
       <Suspense fallback={<AniListSkeleton />}>
         <AniList variableType={variableType} searchKeyword={searchKeyword} />
       </Suspense>
-      {aniId && (
-        <Suspense fallback={<AniModalSkeleton />}>
-          <AniModal aniId={aniId} />
-        </Suspense>
-      )}
+      {aniId && <AniModal aniId={aniId} />}
     </>
   );
 }
