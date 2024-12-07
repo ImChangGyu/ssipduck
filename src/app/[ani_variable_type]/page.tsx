@@ -4,6 +4,7 @@ import Ani from '~/features/ani/components/ani';
 import { getClient } from '~/lib/client';
 import { VariableType } from '~/types/ani';
 import { stripTag } from '~/utils/formatter';
+import ogImage from '../../../public/og-image.jpg';
 
 interface AniPageProps {
   params: { ani_variable_type: VariableType };
@@ -26,7 +27,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${aniInfo.data.Media.title.romaji} | 씹덕`,
       description: stripTag(aniInfo.data.Media.description),
-      images: [aniInfo.data.Media.bannerImage],
+      images: [aniInfo.data.Media.bannerImage, ogImage.src],
     },
   };
 }
