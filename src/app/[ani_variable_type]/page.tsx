@@ -3,6 +3,7 @@ import { getAniByIdQuery } from '~/features/ani/api/get-ani-by-id';
 import Ani from '~/features/ani/components/ani';
 import { getClient } from '~/lib/client';
 import { VariableType } from '~/types/ani';
+import { stripTag } from '~/utils/formatter';
 
 interface AniPageProps {
   params: { ani_variable_type: VariableType };
@@ -24,7 +25,7 @@ export async function generateMetadata({
     title: `${aniInfo.data.Media.title.romaji} | 씹덕`,
     openGraph: {
       title: `${aniInfo.data.Media.title.romaji} | 씹덕`,
-      description: aniInfo.data.Media.description,
+      description: stripTag(aniInfo.data.Media.description),
       images: [aniInfo.data.Media.bannerImage],
     },
   };
