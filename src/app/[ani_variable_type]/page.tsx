@@ -24,6 +24,7 @@ export async function generateMetadata({
     title: `${aniInfo.data.Media.title.romaji} | 씹덕`,
     openGraph: {
       title: `${aniInfo.data.Media.title.romaji} | 씹덕`,
+      description: aniInfo.data.Media.description,
       images: [aniInfo.data.Media.bannerImage],
     },
   };
