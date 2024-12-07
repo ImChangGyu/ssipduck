@@ -1,7 +1,7 @@
 import { gql, useSuspenseQuery } from '@apollo/client';
 import { AniModalItemType } from '~/types/ani';
 
-const getAniByIdQuery = gql`
+export const getAniByIdQuery = gql`
   query media($id: Int) {
     Media(id: $id) {
       id
