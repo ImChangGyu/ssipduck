@@ -30,6 +30,10 @@ const getAniHeroQuery = gql`
         coverImage {
           extraLarge
         }
+        trailer {
+          id
+          site
+        }
       }
     }
   }
@@ -44,6 +48,7 @@ interface AniHeroData {
       genres: string[];
       bannerImage: string | null;
       coverImage: { extraLarge: string };
+      trailer: { id: string | null; site: string | null } | null;
     }>;
   };
 }

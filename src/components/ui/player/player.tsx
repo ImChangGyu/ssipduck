@@ -55,6 +55,8 @@ export default function Player({ url, placeholderImage }: PlayerProps) {
             height="100%"
             className="w-full h-full absolute top-0 left-0 z-10"
           />
+          {/* Transparent overlay to block YouTube's default hover UI */}
+          <div className="absolute inset-0 z-10" aria-hidden />
           <Button
             variant="ghost"
             size="icon"

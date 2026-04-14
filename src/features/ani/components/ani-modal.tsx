@@ -46,7 +46,9 @@ export default function AniModal({ aniId }: AniModalProps) {
     >
       <DialogContent
         showCloseButton={false}
-        className="!max-w-[min(900px,calc(100vw-2rem))] p-0 gap-0 overflow-hidden rounded-xl bg-surface-container-low border-outline-variant shadow-elevation-4"
+        className="p-0 gap-0 overflow-hidden bg-surface-container-low border-outline-variant shadow-elevation-4
+          max-sm:inset-0 max-sm:top-0 max-sm:left-0 max-sm:translate-x-0 max-sm:translate-y-0 max-sm:max-w-full max-sm:w-full max-sm:h-dvh max-sm:rounded-none
+          sm:max-w-[min(900px,calc(100vw-2rem))] sm:rounded-xl"
       >
         <DialogTitle className="sr-only">{ani.title.romaji}</DialogTitle>
 
@@ -63,7 +65,7 @@ export default function AniModal({ aniId }: AniModalProps) {
         </DialogClose>
 
         {/* Scrollable body */}
-        <div className="max-h-[90vh] overflow-y-auto no-scrollbar">
+        <div className="overflow-y-auto no-scrollbar max-h-[90vh] max-sm:max-h-none max-sm:h-full">
           {/* Hero: trailer or banner */}
           <div className="relative w-full">
             {hasTrailer ? (
@@ -103,12 +105,12 @@ export default function AniModal({ aniId }: AniModalProps) {
             {/* Poster + Meta */}
             <div className="flex gap-5 items-start">
               {/* Poster */}
-              <div className="hidden sm:block flex-shrink-0 w-[120px] -mt-16 rounded-md overflow-hidden shadow-elevation-2 border border-outline-variant/60">
+              <div className="hidden sm:block flex-shrink-0 w-[160px] -mt-20 rounded-md overflow-hidden shadow-elevation-2 border border-outline-variant/60">
                 <div className="relative aspect-[2/3]">
                   <Image
                     src={ani.coverImage.extraLarge}
                     fill
-                    sizes="120px"
+                    sizes="160px"
                     alt={`${ani.title.romaji} 포스터`}
                     className="object-cover z-10"
                   />

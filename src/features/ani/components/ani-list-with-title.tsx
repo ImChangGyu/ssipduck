@@ -1,7 +1,10 @@
+'use client';
+
 import { Separator } from '~/components/ui/separator';
 import AniItemCompact from '~/features/ani/components/ani-item-compact';
 import { AniItemType } from '~/types/ani';
 import { isEmptyArray } from '~/utils/array';
+import { useDragScroll } from '~/hooks/use-drag-scroll';
 
 interface AniListWithTitleProps {
   title: string;
@@ -12,6 +15,9 @@ export default function AniListWithTitle({
   title,
   aniList,
 }: AniListWithTitleProps) {
+  const { ref, onMouseDown, onMouseMove, onMouseUp, onMouseLeave } =
+    useDragScroll<HTMLDivElement>();
+
   if (isEmptyArray(aniList)) return null;
 
   return (
@@ -25,7 +31,14 @@ export default function AniListWithTitle({
       </div>
 
       {/* Horizontal scroll row */}
-      <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+      <div
+        ref={ref}
+        className="flex gap-3 overflow-x-auto no-scrollbar pb-2 cursor-grab"
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseLeave}
+      >
         {aniList.map((ani) => (
           <AniItemCompact key={`${title}-${ani.id}`} ani={ani} />
         ))}

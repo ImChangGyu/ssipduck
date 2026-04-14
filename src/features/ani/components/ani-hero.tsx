@@ -5,9 +5,10 @@ import { Play } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Badge } from '~/components/ui/badge';
 import { Button } from '~/components/ui/button';
+import Player from '~/components/ui/player/player';
 import { useAniHero } from '~/features/ani/api/get-ani-hero';
 import { VariableType } from '~/types/ani';
-import { stripTag } from '~/utils/formatter';
+import { stripTag, trailerUrl } from '~/utils/formatter';
 
 interface AniHeroProps {
   type: VariableType;
@@ -35,6 +36,7 @@ export default function AniHero({ type }: AniHeroProps) {
   if (!ani) return null;
 
   const bgImage = ani.bannerImage || ani.coverImage.extraLarge;
+  const hasTrailer = Boolean(ani.trailer?.id);
   const description = stripTag(ani.description);
 
   const onHeroClick = () => {
@@ -48,29 +50,36 @@ export default function AniHero({ type }: AniHeroProps) {
     >
       {/* Backdrop */}
       <div className="absolute inset-0">
-        <Image
-          src={bgImage}
-          fill
-          sizes="100vw"
-          priority
-          alt=""
-          aria-hidden
-          className="object-cover object-center scale-[1.04]"
-        />
+        {hasTrailer ? (
+          <Player
+            url={trailerUrl(ani.trailer!.id!, ani.trailer!.site ?? '')}
+            placeholderImage={bgImage}
+          />
+        ) : (
+          <Image
+            src={bgImage}
+            fill
+            sizes="100vw"
+            priority
+            alt=""
+            aria-hidden
+            className="object-cover object-center scale-[1.04]"
+          />
+        )}
         {/* Subtle image outline */}
         <div
           aria-hidden
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 z-10 pointer-events-none"
           style={{ boxShadow: 'inset 0 0 0 1px rgba(237,237,242,0.06)' }}
         />
         {/* Bottom gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/55 to-background/10" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-background/55 to-background/10" />
         {/* Left gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/25 to-transparent" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-background/85 via-background/25 to-transparent" />
       </div>
 
       {/* Content */}
-      <div className="absolute inset-0 flex items-end">
+      <div className="absolute inset-0 z-30 flex items-end">
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 pb-16 flex flex-col gap-4 max-w-2xl animate-hero-content">
           {/* Category label */}
           <span className="inline-flex items-center gap-2 text-label-md font-semibold text-primary tracking-widest uppercase">
