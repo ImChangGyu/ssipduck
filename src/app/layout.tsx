@@ -58,14 +58,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" data-theme="dark">
       <head>
         <meta
           name="google-site-verification"
           content={process.env.NEXT_PUBLIC_SITE_VERIFICATION_ID}
         />
       </head>
-      <body className={poppin.className}>
+      <body className={`${poppin.className} antialiased bg-background text-on-surface`}>
         <ApolloProvider>
           <DefaultLayout>{children}</DefaultLayout>
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID ?? ''} />

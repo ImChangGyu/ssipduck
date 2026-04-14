@@ -5,7 +5,7 @@ import {
   ApolloNextAppProvider,
   ApolloClient,
   InMemoryCache,
-} from '@apollo/experimental-nextjs-app-support';
+} from '@apollo/client-integration-nextjs';
 import { ANI_API_URL } from '~/constants/url';
 
 function makeClient() {
