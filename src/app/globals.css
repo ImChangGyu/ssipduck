@@ -1,24 +1,296 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind v4 */
+@import "tailwindcss";
+@import "tw-animate-css";
 
+/* M3 Design Tokens */
+@import "../styles/tokens/index.css";
+
+/* ─── Cinematic Dark Theme Override ───────────────────────────────────────
+   Replaces the M3 default light palette with a dark-only cinematic palette.
+   All Tailwind utilities (bg-primary, text-on-surface, etc.) pick these up
+   at runtime via the @theme var() references below.
+   ─────────────────────────────────────────────────────────────────────── */
+:root {
+  --md-sys-color-background: #0b0b0f;
+  --md-sys-color-on-background: #ededf2;
+  --md-sys-color-surface: #0b0b0f;
+  --md-sys-color-on-surface: #ededf2;
+  --md-sys-color-surface-variant: #1a1a22;
+  --md-sys-color-on-surface-variant: #a8a8b3;
+  --md-sys-color-surface-tint: #e5b8ff;
+  --md-sys-color-surface-dim: #0b0b0f;
+  --md-sys-color-surface-bright: #272732;
+  --md-sys-color-surface-container-lowest: #0e0e13;
+  --md-sys-color-surface-container-low: #14141b;
+  --md-sys-color-surface-container: #1a1a22;
+  --md-sys-color-surface-container-high: #20202a;
+  --md-sys-color-surface-container-highest: #272732;
+
+  --md-sys-color-primary: #e5b8ff;
+  --md-sys-color-on-primary: #2a0c4a;
+  --md-sys-color-primary-container: #4a2e74;
+  --md-sys-color-on-primary-container: #f1deff;
+
+  --md-sys-color-secondary: #ffb38a;
+  --md-sys-color-on-secondary: #4a1c00;
+  --md-sys-color-secondary-container: #6b2e0c;
+  --md-sys-color-on-secondary-container: #ffdbc9;
+
+  --md-sys-color-tertiary: #7fd4ff;
+  --md-sys-color-on-tertiary: #003549;
+  --md-sys-color-tertiary-container: #004d6a;
+  --md-sys-color-on-tertiary-container: #c5e8ff;
+
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+
+  --md-sys-color-outline: #3a3a46;
+  --md-sys-color-outline-variant: #22222c;
+
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+
+  --md-sys-color-inverse-surface: #ededf2;
+  --md-sys-color-inverse-on-surface: #1a1a22;
+  --md-sys-color-inverse-primary: #6750a4;
+}
+
+/* ─── Tailwind v4 Theme ────────────────────────────────────────────────────
+   CSS-first configuration: maps --md-sys-* variables to Tailwind utilities.
+   e.g.  bg-primary, text-on-surface, rounded-lg, shadow-elevation-2
+   ─────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* ── M3 Color Roles ── */
+  --color-primary: var(--md-sys-color-primary);
+  --color-on-primary: var(--md-sys-color-on-primary);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+
+  --color-secondary: var(--md-sys-color-secondary);
+  --color-on-secondary: var(--md-sys-color-on-secondary);
+  --color-secondary-container: var(--md-sys-color-secondary-container);
+  --color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+
+  --color-tertiary: var(--md-sys-color-tertiary);
+  --color-on-tertiary: var(--md-sys-color-on-tertiary);
+  --color-tertiary-container: var(--md-sys-color-tertiary-container);
+  --color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+
+  --color-error: var(--md-sys-color-error);
+  --color-on-error: var(--md-sys-color-on-error);
+  --color-error-container: var(--md-sys-color-error-container);
+  --color-on-error-container: var(--md-sys-color-on-error-container);
+
+  --color-surface: var(--md-sys-color-surface);
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-surface-variant: var(--md-sys-color-surface-variant);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --color-surface-tint: var(--md-sys-color-surface-tint);
+
+  --color-inverse-surface: var(--md-sys-color-inverse-surface);
+  --color-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
+  --color-inverse-primary: var(--md-sys-color-inverse-primary);
+
+  --color-background: var(--md-sys-color-background);
+  --color-on-background: var(--md-sys-color-on-background);
+
+  --color-outline: var(--md-sys-color-outline);
+  --color-outline-variant: var(--md-sys-color-outline-variant);
+
+  --color-shadow: var(--md-sys-color-shadow);
+  --color-scrim: var(--md-sys-color-scrim);
+
+  /* Surface container roles (M3 expanded palette) */
+  --color-surface-container-lowest: var(
+    --md-sys-color-surface-container-lowest
+  );
+  --color-surface-container-low: var(--md-sys-color-surface-container-low);
+  --color-surface-container: var(--md-sys-color-surface-container);
+  --color-surface-container-high: var(--md-sys-color-surface-container-high);
+  --color-surface-container-highest: var(
+    --md-sys-color-surface-container-highest
+  );
+
+  /* ── M3 Shape (Border Radius) ── */
+  --radius-none: var(--md-sys-shape-corner-none);
+  --radius-xs: var(--md-sys-shape-corner-xs);
+  --radius-sm: var(--md-sys-shape-corner-sm);
+  --radius-md: var(--md-sys-shape-corner-md);
+  --radius-lg: var(--md-sys-shape-corner-lg);
+  --radius-lg-plus: var(--md-sys-shape-corner-lg-plus);
+  --radius-xl: var(--md-sys-shape-corner-xl);
+  --radius-xl-plus: var(--md-sys-shape-corner-xl-plus);
+  --radius-2xl: var(--md-sys-shape-corner-2xl);
+  --radius-full: var(--md-sys-shape-corner-full);
+
+  /* ── M3 Elevation (Box Shadow) ── */
+  --shadow-elevation-0: var(--md-sys-elevation-0);
+  --shadow-elevation-1: var(--md-sys-elevation-1);
+  --shadow-elevation-2: var(--md-sys-elevation-2);
+  --shadow-elevation-3: var(--md-sys-elevation-3);
+  --shadow-elevation-4: var(--md-sys-elevation-4);
+  --shadow-elevation-5: var(--md-sys-elevation-5);
+
+  /* ── M3 Typescale ── */
+  --text-display-lg: var(--md-sys-typescale-display-large-size);
+  --text-display-md: var(--md-sys-typescale-display-medium-size);
+  --text-display-sm: var(--md-sys-typescale-display-small-size);
+
+  --text-headline-lg: var(--md-sys-typescale-headline-large-size);
+  --text-headline-md: var(--md-sys-typescale-headline-medium-size);
+  --text-headline-sm: var(--md-sys-typescale-headline-small-size);
+
+  --text-title-lg: var(--md-sys-typescale-title-large-size);
+  --text-title-md: var(--md-sys-typescale-title-medium-size);
+  --text-title-sm: var(--md-sys-typescale-title-small-size);
+
+  --text-body-lg: var(--md-sys-typescale-body-large-size);
+  --text-body-md: var(--md-sys-typescale-body-medium-size);
+  --text-body-sm: var(--md-sys-typescale-body-small-size);
+
+  --text-label-lg: var(--md-sys-typescale-label-large-size);
+  --text-label-md: var(--md-sys-typescale-label-medium-size);
+  --text-label-sm: var(--md-sys-typescale-label-small-size);
+
+  /* ── Grid layouts ── */
+  --grid-template-columns-list: repeat(auto-fill, minmax(200px, 1fr));
+  --grid-template-columns-modal-list: repeat(auto-fill, minmax(130px, 1fr));
+
+  /* ── shadcn/ui aliases (mapped to M3 roles) ──────────────────────────────
+     shadcn components use these semantic names. We point them at M3 vars
+     so our cinematic dark palette is preserved automatically.
+     NOTE: --color-primary and --color-background already defined above.
+     ────────────────────────────────────────────────────────────────────── */
+  --color-foreground: var(--md-sys-color-on-background);
+  --color-card: var(--md-sys-color-surface-container-low);
+  --color-card-foreground: var(--md-sys-color-on-surface);
+  --color-popover: var(--md-sys-color-surface-container-high);
+  --color-popover-foreground: var(--md-sys-color-on-surface);
+  --color-primary-foreground: var(--md-sys-color-on-primary);
+  /* Override: shadcn secondary = M3 tonal container (not the orange accent) */
+  --color-secondary: var(--md-sys-color-secondary-container);
+  --color-secondary-foreground: var(--md-sys-color-on-secondary-container);
+  --color-muted: var(--md-sys-color-surface-variant);
+  --color-muted-foreground: var(--md-sys-color-on-surface-variant);
+  --color-accent: var(--md-sys-color-tertiary-container);
+  --color-accent-foreground: var(--md-sys-color-on-tertiary-container);
+  --color-destructive: var(--md-sys-color-error);
+  --color-destructive-foreground: var(--md-sys-color-on-error);
+  --color-border: var(--md-sys-color-outline-variant);
+  --color-input: var(--md-sys-color-outline);
+  --color-ring: var(--md-sys-color-primary);
+  /* shadcn base radius — matches M3 medium corner (12px) */
+  --radius: var(--md-sys-shape-corner-md);
+}
+
+/* ─── Custom easing variables ────────────────────────────────────────────── */
+:root {
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* ── Custom utilities ────────────────────────────────────────────────────── */
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .grid-cols-list {
+    /* 2 cols mobile, 3-4 tablet, 4-5 desktop */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  .grid-cols-modal_list {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+
+  /* Skeleton shimmer */
+  @keyframes skeleton-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+  .animate-skeleton {
+    animation: skeleton-pulse 1.8s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  .animate-shimmer {
+    animation: shimmer 1.8s ease-in-out infinite;
+  }
+
+  /* Modal entry */
+  @keyframes modal-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  .animate-modal-in {
+    animation: modal-in 240ms var(--ease-out-strong) forwards;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  .animate-fade-in {
+    animation: fade-in 200ms ease-out forwards;
+  }
+
+  /* Hero entry */
+  @keyframes hero-content-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-hero-content {
+    animation: hero-content-in 400ms var(--ease-out-strong) forwards;
+  }
+
+  /* Touch-safe hover: only fire on actual pointer devices */
+  @media (hover: hover) and (pointer: fine) {
+    .hover-lift:hover {
+      transform: translateY(-4px);
+    }
   }
 }
 
+/* ── Base resets ─────────────────────────────────────────────────────────── */
 body {
-  background: #f9f9fc;
+  background: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-surface);
 }
 * {
-  padding: 0;
-  margin: 0;
   box-sizing: border-box;
   vertical-align: baseline;
 }
