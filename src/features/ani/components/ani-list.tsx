@@ -31,11 +31,11 @@ export default function AniList({ variableType, searchKeyword }: AniListProps) {
   });
 
   return (
-    <div className="w-full h-full grid gap-[24px] grid-cols-list mb-[5px] px-[3%] py-[20px] md:px-[5%] justify-items-center">
+    <div className="w-full grid gap-4 grid-cols-list px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8">
       {aniList.map((ani, index) => (
         <AniItem ani={ani} key={`ani-item_${ani.id}_${index}`} />
       ))}
-      <div ref={ref} />
+      <div ref={ref} className="col-span-full" />
     </div>
   );
 }

@@ -1,30 +1,38 @@
-import { MouseEventHandler } from 'react';
+'use client';
+
+import { Star } from 'lucide-react';
+import { Button } from '~/components/ui/button';
+import { cn } from '~/lib/utils';
 import { useFavoriteAniListStore } from '~/store/ani';
-import * as SVG from '~/assets/svg';
-import { cn } from '~/utils/cn';
 
 interface FavoriteAniProps {
   aniId: number;
 }
 
 export default function FavoriteAni({ aniId }: FavoriteAniProps) {
-  const { favoriteAniIdList, updateFavoriteAniIdList } =
-    useFavoriteAniListStore();
-
-  const onFavoriteAniClick: MouseEventHandler<SVGSVGElement> = (event) => {
-    event.stopPropagation();
-    updateFavoriteAniIdList(aniId);
-  };
+  const { favoriteAniIdList, updateFavoriteAniIdList } = useFavoriteAniListStore();
+  const isFavorite = favoriteAniIdList.includes(aniId);
 
   return (
-    <SVG.Star
-      className={cn(
-        'flex-shrink cursor-pointer',
-        favoriteAniIdList.includes(aniId)
-          ? 'fill-primary storke-primary'
-          : 'fill-white stroke-gray_scale_100'
-      )}
-      onClick={onFavoriteAniClick}
-    />
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={(e) => {
+        e.stopPropagation();
+        updateFavoriteAniIdList(aniId);
+      }}
+      aria-label={isFavorite ? '즐겨찾기 해제' : '즐겨찾기 추가'}
+      aria-pressed={isFavorite}
+      className="rounded-full"
+    >
+      <Star
+        className={cn(
+          'transition-colors duration-150',
+          isFavorite
+            ? 'fill-primary text-primary'
+            : 'text-muted-foreground'
+        )}
+      />
+    </Button>
   );
 }
