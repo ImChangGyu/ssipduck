@@ -19,17 +19,22 @@ export default function LoggerButton({
   const logger = useLogger();
   if (!isValidElement(children)) return children;
 
-  return Children.map(children, (child) =>
-    createElement(
+  return Children.map(children, (child) => {
+    const props = child.props as {
+      onClick?: (...args: any[]) => any;
+      children?: React.ReactNode;
+      [key: string]: unknown;
+    };
+    return createElement(
       'div',
       {
-        ...child.props,
+        ...props,
         onClick: (...args: any[]) => {
           logger.click({ event, value });
-          return child.props.onClick?.(...args);
+          return props.onClick?.(...args);
         },
       },
-      child.props.children
-    )
-  );
+      props.children
+    );
+  });
 }

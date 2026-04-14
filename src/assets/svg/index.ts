@@ -4,3 +4,4 @@ export { default as Star } from './star';
 export { default as Speaker } from './speaker';
 export { default as Mute } from './mute';
 export { default as Exit } from './exit';
+export { default as Filter } from './filter';

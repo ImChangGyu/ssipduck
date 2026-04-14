@@ -1,0 +1,10 @@
+/* AUTO-GENERATED — do not edit manually. Run: pnpm tokens:gen */
+
+:root {
+  --md-sys-elevation-0: none;
+  --md-sys-elevation-1: 0px 1px 3px 1px #00000026, 0px 1px 2px 0px #0000004d;
+  --md-sys-elevation-2: 0px 2px 6px 2px #00000026, 0px 1px 2px 0px #0000004d;
+  --md-sys-elevation-3: 0px 1px 3px 0px #0000004d, 0px 4px 8px 3px #00000026;
+  --md-sys-elevation-4: 0px 2px 3px 0px #0000004d, 0px 6px 10px 4px #00000026;
+  --md-sys-elevation-5: 0px 4px 4px 0px #0000004d, 0px 8px 12px 6px #00000026;
+}

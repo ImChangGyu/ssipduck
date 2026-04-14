@@ -3,7 +3,7 @@ import {
   registerApolloClient,
   ApolloClient,
   InMemoryCache,
-} from '@apollo/experimental-nextjs-app-support';
+} from '@apollo/client-integration-nextjs';
 import { ANI_API_URL } from '~/constants/url';
 
 export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
@@ -11,6 +11,7 @@ export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
     cache: new InMemoryCache(),
     link: new HttpLink({
       uri: ANI_API_URL,
+      fetchOptions: { next: { revalidate: 3600 } },
     }),
   });
 });

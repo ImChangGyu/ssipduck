@@ -1,36 +1,43 @@
-import * as SVG from '~/assets/svg';
+import { Skeleton } from '~/components/ui/skeleton';
 
 export default function AniModalSkeleton() {
   return (
-    <div className="fixed flex items-center justify-center inset-0">
-      <div className="w-full h-full fixed top-0 left-0 bg-black opacity-70" />
-      <div className="w-[1000px] h-[calc(100vh-100px)] bg-white text-white rounded-lg relative flex flex-col overflow-scroll">
-        <div className="w-10 h-10 bg-[#00000055] absolute top-4 right-4 rounded-full flex items-center justify-center z-10 cursor-pointer">
-          <SVG.Exit />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" aria-hidden>
+      {/* Scrim */}
+      <div className="absolute inset-0 bg-background/85 backdrop-blur-lg" />
+
+      {/* Shell */}
+      <div className="relative z-10 w-full max-w-[900px] max-h-[90vh] overflow-hidden rounded-xl bg-surface-container-low border border-outline-variant shadow-elevation-4">
+
+        {/* Hero skeleton */}
+        <div className="relative w-full aspect-video overflow-hidden">
+          <Skeleton className="absolute inset-0 rounded-none bg-surface-container" />
+          <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-on-surface/5 to-transparent" />
         </div>
-        <div className="w-full relative">
-          <div className="w-full h-[400px] bg-gray-300 animate-[skeleton_2s_ease-in-out_infinite]"></div>
-          <div className="w-full h-[50px] absolute bottom-0 left-0 bg-gradient-to-t from-white to-transparent" />
-        </div>
-        <div className="flex flex-col p-8">
-          <div className="flex gap-4">
-            <div className="w-full flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <h1 className="w-full h-5 bg-gray-300 animate-[skeleton_2s_ease-in-out_infinite]"></h1>
-              </div>
-              <div className="w-full h-[150px] bg-gray-300 animate-[skeleton_2s_ease-in-out_infinite]"></div>
+
+        {/* Content skeleton */}
+        <div className="px-6 py-6 md:px-8 flex flex-col gap-4">
+          <div className="flex gap-5 items-start">
+            {/* Poster */}
+            <div className="hidden sm:block flex-shrink-0 w-[120px] -mt-16">
+              <Skeleton className="aspect-[2/3] bg-surface-container" />
+            </div>
+            {/* Title + genres */}
+            <div className="flex-1 flex flex-col gap-3">
+              <Skeleton className="h-8 bg-surface-container w-3/4" />
               <div className="flex gap-2">
-                {Array.from({ length: 3 }, (_, index) => (
-                  <span
-                    key={`genre_${index}`}
-                    className="w-[110px] h-4 opacity-80 bg-gray-300 animate-[skeleton_2s_ease-in-out_infinite]"
-                  />
+                {[60, 80, 56].map((w) => (
+                  <Skeleton key={w} className="h-7 rounded-full bg-surface-container" style={{ width: w }} />
                 ))}
               </div>
             </div>
-            <div className="w-[215px] h-[290px] flex-shrink-0 bg-gray-300 animate-[skeleton_2s_ease-in-out_infinite]"></div>
           </div>
-          <div className="mt-10"></div>
+          {/* Description */}
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-4 bg-surface-container" />
+            <Skeleton className="h-4 bg-surface-container w-11/12" />
+            <Skeleton className="h-4 bg-surface-container w-9/12" />
+          </div>
         </div>
       </div>
     </div>

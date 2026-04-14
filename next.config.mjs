@@ -9,10 +9,16 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
   output: 'standalone',
+  async redirects() {
+    return [
+      {
+        source: '/:type(popular|trend|upcoming|movie|favorite)',
+        destination: '/?type=:type',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

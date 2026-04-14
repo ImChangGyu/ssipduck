@@ -1,29 +1,17 @@
-import FavoriteAni from '~/features/ani/components/favorite-ani';
+import { Skeleton } from '~/components/ui/skeleton';
 
 export default function AniListSkeleton() {
   return (
-    <div className="w-full h-full grid gap-[24px] grid-cols-list mb-[5px] px-[3%] py-[20px] md:px-[5%] justify-items-center">
-      {Array.from({ length: 50 }, (_, index) => (
+    <div className="w-full grid gap-4 grid-cols-list px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8">
+      {Array.from({ length: 20 }, (_, index) => (
         <div
           key={index}
-          className="w-full h-[360px] flex flex-col gap-4 p-6 bg-white border border-transparent rounded-2xl shadow-item hover:border-primary hover:shadow-hover_shadow_color"
+          className="w-full rounded-lg overflow-hidden border border-outline-variant/50"
         >
-          <div className="w-full min-h-[170px] object-cover rounded-lg bg-gray-300 animate-[skeleton_2s_ease-in-out_infinite]" />
-          <div className="w-full h-full flex flex-col justify-between">
-            <div className="flex flex-col gap-[10px] ">
-              <div className="w-full h-4 flex justify-between items-center bg-gray-300 animate-[skeleton_2s_ease-in-out_infinite]">
-                <div className="w-full text-primary_darken" />
-              </div>
-              <div className="w-full h-14 bg-gray-300 animate-[skeleton_2s_ease-in-out_infinite]" />
-            </div>
-            <div className="w-full flex gap-2 line-clamp-1">
-              {Array.from({ length: 3 }, (_, index) => (
-                <span
-                  key={`genre_${index}`}
-                  className="w-[110px] h-4 opacity-80 bg-gray-300 animate-[skeleton_2s_ease-in-out_infinite]"
-                />
-              ))}
-            </div>
+          {/* Poster only — matches Netflix-style AniItem */}
+          <div className="relative aspect-[2/3] overflow-hidden">
+            <Skeleton className="absolute inset-0 rounded-none bg-surface-container" />
+            <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-on-surface/5 to-transparent" />
           </div>
         </div>
       ))}
