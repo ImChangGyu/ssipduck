@@ -1,22 +1,17 @@
 'use client';
 
-import { useState } from 'react';
 import { Check, ListFilter } from 'lucide-react';
 import { Button } from '~/components/ui/button';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '~/components/ui/popover';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '~/components/ui/sheet';
-import { useMediaQuery } from '~/hooks/use-media-query';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu';
 import { VariableType } from '~/types/ani';
+import { cn } from '~/lib/utils';
 
 const FILTER_OPTIONS: { value: VariableType; label: string; emoji: string }[] = [
   { value: 'popular',  label: 'Popular',  emoji: '🔥' },
@@ -26,95 +21,65 @@ const FILTER_OPTIONS: { value: VariableType; label: string; emoji: string }[] = 
   { value: 'favorite', label: 'Favorite', emoji: '⭐' },
 ];
 
+const DEFAULT_TYPE: VariableType = 'popular';
+
 interface AniFilterProps {
   value: VariableType;
   onChange: (type: VariableType) => void;
 }
 
-function FilterOptionList({
-  value,
-  onChange,
-  onClose,
-}: AniFilterProps & { onClose: () => void }) {
-  return (
-    <div className="flex flex-col gap-1 py-1">
-      {FILTER_OPTIONS.map((opt) => {
-        const isSelected = opt.value === value;
-        return (
-          <Button
-            key={opt.value}
-            variant={isSelected ? 'secondary' : 'ghost'}
-            className="w-full justify-start gap-3 px-4"
-            onClick={() => {
-              onChange(opt.value);
-              onClose();
-            }}
-          >
-            <span aria-hidden>{opt.emoji}</span>
-            <span className="flex-1 text-left">{opt.label}</span>
-            {isSelected && <Check className="ml-auto size-4" />}
-          </Button>
-        );
-      })}
-    </div>
-  );
-}
-
 export default function AniFilter({ value, onChange }: AniFilterProps) {
-  const [open, setOpen] = useState(false);
-  const isMobile = useMediaQuery('(max-width: 767px)');
-  const currentLabel = FILTER_OPTIONS.find((o) => o.value === value)?.label ?? 'Popular';
-
-  const trigger = (
-    <Button
-      type="button"
-      variant="ghost"
-      aria-label={`필터: ${currentLabel}`}
-      aria-expanded={open}
-      className="shrink-0 gap-1.5 px-3 h-full rounded-none border-l border-outline text-on-surface-variant text-label-lg font-medium hover:bg-transparent hover:text-on-surface data-[state=open]:text-primary"
-    >
-      <ListFilter className="size-[18px] shrink-0" />
-      <span className="hidden sm:inline">{currentLabel}</span>
-    </Button>
-  );
-
-  if (isMobile) {
-    return (
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>{trigger}</SheetTrigger>
-        <SheetContent
-          side="bottom"
-          className="bg-surface-container-high border-outline-variant rounded-t-xl pb-safe"
-          showCloseButton={false}
-        >
-          <SheetHeader>
-            <SheetTitle className="text-title-md font-semibold text-on-surface text-left">
-              카테고리
-            </SheetTitle>
-          </SheetHeader>
-          <FilterOptionList
-            value={value}
-            onChange={onChange}
-            onClose={() => setOpen(false)}
-          />
-        </SheetContent>
-      </Sheet>
-    );
-  }
+  const current = FILTER_OPTIONS.find((o) => o.value === value)!;
+  const isActive = value !== DEFAULT_TYPE;
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
-      <PopoverContent
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          aria-label={`필터: ${current.label}`}
+          className={cn(
+            'h-12 gap-2 px-3 shrink-0 border-outline text-label-lg font-medium',
+            'text-on-surface-variant hover:text-on-surface transition-colors',
+            isActive && 'border-primary text-primary bg-primary/5 hover:text-primary',
+          )}
+        >
+          <ListFilter className="size-[18px] shrink-0" />
+          <span className="hidden sm:inline">
+            {current.emoji} {current.label}
+          </span>
+          {isActive && (
+            <span className="sm:hidden size-2 rounded-full bg-primary shrink-0" aria-hidden />
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
         align="end"
-        className="w-48 p-1 bg-surface-container-high border-outline-variant shadow-elevation-3"
+        className="w-44 sm:w-44 bg-surface-container-high border-outline-variant shadow-elevation-3"
       >
-        <FilterOptionList
-          value={value}
-          onChange={onChange}
-          onClose={() => setOpen(false)}
-        />
-      </PopoverContent>
-    </Popover>
+        <DropdownMenuLabel className="text-label-sm text-on-surface-variant">
+          카테고리
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+          {FILTER_OPTIONS.map((opt) => {
+            const selected = opt.value === value;
+            return (
+              <DropdownMenuItem
+                key={opt.value}
+                onClick={() => onChange(opt.value)}
+                className={cn(
+                  'gap-2 text-label-lg cursor-pointer',
+                  selected && 'bg-primary/10 text-primary focus:bg-primary/15 focus:text-primary',
+                )}
+              >
+                <span aria-hidden>{opt.emoji}</span>
+                <span className="flex-1">{opt.label}</span>
+                {selected && <Check className="size-4 shrink-0" />}
+              </DropdownMenuItem>
+            );
+          })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -3,19 +3,10 @@
 import { useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { Button } from '~/components/ui/button';
-import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group';
+import { Input } from '~/components/ui/input';
 import AniFilter from '~/features/ani/components/ani-filter';
 import { VariableType } from '~/types/ani';
 import { cn } from '~/lib/utils';
-
-const FILTER_LABELS: Record<VariableType, string> = {
-  popular:  '🔥 Popular',
-  trend:    '📈 Trend',
-  upcoming: '🗓️ Upcoming',
-  movie:    '🎬 Movie',
-  favorite: '⭐ Favorite',
-};
 
 interface SearchAniProps {
   q: string;
@@ -50,66 +41,28 @@ export default function SearchAni({
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-4">
       {/* Search + Filter bar */}
-      <form
-        onSubmit={onSubmit}
-        className={cn(
-          'flex items-stretch',
-          'bg-surface-container rounded-xl',
-          'border border-outline',
-          'overflow-hidden',
-          'shadow-elevation-1',
-          'focus-within:shadow-elevation-2 focus-within:border-primary',
-          'transition-shadow duration-200'
-        )}
-      >
-        {/* Search icon button */}
-        <Button
-          type="submit"
-          variant="ghost"
-          size="icon"
-          aria-label="검색"
-          className="shrink-0 ml-1 text-on-surface-variant hover:bg-transparent hover:text-on-surface"
-        >
-          <Search />
-        </Button>
+      <div className="flex items-center gap-2">
+        <form onSubmit={onSubmit} className="relative flex-1">
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-on-surface-variant pointer-events-none"
+            aria-hidden
+          />
+          <Input
+            type="text"
+            placeholder="애니 검색..."
+            aria-label="애니 검색"
+            className={cn(
+              'h-12 pl-10 text-body-lg',
+              'bg-surface-container border-outline',
+              'placeholder:text-on-surface-variant',
+            )}
+            {...register('search')}
+          />
+        </form>
 
-        {/* Text input */}
-        <input
-          type="text"
-          placeholder="애니 검색..."
-          className="flex-1 min-w-0 h-12 bg-transparent text-body-lg text-on-surface placeholder:text-on-surface-variant outline-none px-2"
-          {...register('search')}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              onSubmit();
-            }
-          }}
-        />
-
-        {/* Filter button (+ popover/sheet) */}
+        {/* Filter button (+ dropdown) */}
         <AniFilter value={type} onChange={onTypeChange} />
-      </form>
-
-      {/* Active filter chip row — ToggleGroup (single select) */}
-      <ToggleGroup
-        type="single"
-        value={type}
-        onValueChange={(val) => { if (val) onTypeChange(val as VariableType); }}
-        className="flex flex-wrap gap-2 mt-2 w-full"
-      >
-        {(Object.keys(FILTER_LABELS) as VariableType[]).map((t) => (
-          <ToggleGroupItem
-            key={t}
-            value={t}
-            className="h-8 rounded-full border border-outline text-label-lg font-medium
-              data-[state=on]:bg-secondary data-[state=on]:text-secondary-foreground data-[state=on]:border-secondary
-              data-[state=off]:text-on-surface-variant data-[state=off]:hover:bg-surface-container-high"
-          >
-            {FILTER_LABELS[t]}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
+      </div>
     </div>
   );
 }
