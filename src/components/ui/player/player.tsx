@@ -1,9 +1,10 @@
 'use client';
 
 import Image from 'next/image';
+import { Volume2, VolumeX } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import ReactPlayer from 'react-player';
-import * as SVG from '~/assets/svg';
+import { Button } from '~/components/ui/button';
 import { usePlayerMutedStore } from '~/store/player';
 
 interface PlayerProps {
@@ -54,12 +55,15 @@ export default function Player({ url, placeholderImage }: PlayerProps) {
             height="100%"
             className="w-full h-full absolute top-0 left-0 z-10"
           />
-          <div
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={togglePlayerMutedState}
-            className="w-10 h-10 bg-[#00000055] absolute bottom-14 right-4 z-20 rounded-full flex items-center justify-center cursor-pointer"
+            aria-label={muted ? '음소거 해제' : '음소거'}
+            className="absolute bottom-14 right-4 z-20 size-10 rounded-full bg-black/30 text-white hover:bg-black/50"
           >
-            {muted ? <SVG.Mute /> : <SVG.Speaker />}
-          </div>
+            {muted ? <VolumeX /> : <Volume2 />}
+          </Button>
         </>
       )}
       <Image
