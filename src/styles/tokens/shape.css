@@ -1,0 +1,14 @@
+/* AUTO-GENERATED — do not edit manually. Run: pnpm tokens:gen */
+
+:root {
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-xs: 4px;
+  --md-sys-shape-corner-sm: 8px;
+  --md-sys-shape-corner-md: 12px;
+  --md-sys-shape-corner-lg: 16px;
+  --md-sys-shape-corner-lg-plus: 20px;
+  --md-sys-shape-corner-xl: 28px;
+  --md-sys-shape-corner-xl-plus: 32px;
+  --md-sys-shape-corner-2xl: 48px;
+  --md-sys-shape-corner-full: 9999px;
+}
