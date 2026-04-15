@@ -39,19 +39,24 @@ export default function AniItem({ ani }: AniItemProps) {
           className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
         />
 
-        {/* Gradient overlay — fades in on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent
-          opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {/* Gradient overlay — always visible, strengthens on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent
+          group-hover:from-black/90 group-hover:via-black/40 transition-all duration-300" />
 
-        {/* Info overlay — slides up on hover */}
-        <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-2
-          translate-y-3 opacity-0
-          group-hover:translate-y-0 group-hover:opacity-100
-          transition-all duration-300 delay-[40ms]">
-
+        {/* Title — always visible at bottom, slides up on hover */}
+        <div className="absolute inset-x-0 bottom-0 p-3
+          transition-transform duration-300
+          group-hover:-translate-y-18">
           <h3 className="text-label-lg font-bold text-white leading-snug line-clamp-2">
             {ani.title.romaji}
           </h3>
+        </div>
+
+        {/* Meta (genre + favorite) — fade-in on hover */}
+        <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-2
+          opacity-0 translate-y-2
+          group-hover:opacity-100 group-hover:translate-y-0
+          transition-all duration-300 delay-[80ms]">
 
           {ani.genres.length > 0 && (
             <div className="flex gap-1 flex-wrap">
