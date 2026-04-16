@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserPlus } from 'lucide-react';
 import { signupSchema, type SignupFormValues } from '~/lib/validations/auth';
-import { createClient } from '~/lib/supabase/client';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '~/components/ui/card';
@@ -41,17 +40,20 @@ export default function SignupPage() {
     setError(null);
     setIsSubmitting(true);
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
-      email: values.email,
-      password: values.password,
-      options: {
-        data: { nickname: values.nickname },
-      },
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: values.email,
+        password: values.password,
+        nickname: values.nickname,
+        redirectTo: `${window.location.origin}/auth/callback`,
+      }),
     });
 
-    if (error) {
-      if (error.message.includes('already registered')) {
+    if (!res.ok) {
+      const data = await res.json();
+      if (data.error?.includes('already registered')) {
         setError('이미 사용 중인 이메일입니다.');
       } else {
         setError('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
@@ -66,7 +68,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md border-none">
         <CardHeader className="text-center space-y-3">
           <div className="flex justify-center">
             <SVG.SsipduckLogo />

@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LogIn } from 'lucide-react';
 import { loginSchema, type LoginFormValues } from '~/lib/validations/auth';
-import { createClient } from '~/lib/supabase/client';
+import { useAuthStore } from '~/store/auth';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '~/components/ui/card';
@@ -27,6 +27,7 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setUser, setProfile, setLoading } = useAuthStore();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -37,15 +38,16 @@ function LoginForm() {
     setError(null);
     setIsSubmitting(true);
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({
-      email: values.email,
-      password: values.password,
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: values.email, password: values.password }),
     });
 
-    if (error) {
+    if (!res.ok) {
+      const data = await res.json();
       setError(
-        error.message === 'Invalid login credentials'
+        data.error === 'Invalid login credentials'
           ? '이메일 또는 비밀번호가 올바르지 않습니다.'
           : '로그인 중 오류가 발생했습니다. 다시 시도해주세요.'
       );
@@ -53,13 +55,17 @@ function LoginForm() {
       return;
     }
 
+    const { user, profile } = await res.json();
+    setUser(user);
+    if (profile) setProfile(profile);
+    setLoading(false);
+
     const redirectTo = searchParams.get('redirectTo') || '/';
     router.push(redirectTo);
-    router.refresh();
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md border-none">
       <CardHeader className="text-center space-y-3">
         <div className="flex justify-center">
           <SVG.SsipduckLogo />

@@ -5,47 +5,24 @@ import { createClient } from '~/lib/supabase/client';
 import { useAuthStore } from '~/store/auth';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { setUser, setProfile, setLoading, reset } = useAuthStore();
+  const { setUser, reset } = useAuthStore();
 
   useEffect(() => {
     const supabase = createClient();
 
-    // 초기 세션 로드
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        setUser(user);
-        supabase
-          .from('profiles')
-          .select('id, nickname')
-          .eq('id', user.id)
-          .single()
-          .then(({ data }) => {
-            if (data) setProfile(data);
-          });
-      }
-      setLoading(false);
-    });
-
-    // 인증 상태 변경 리스너
+    // 토큰 갱신 감지 (세션 만료 자동 갱신)
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        setUser(session.user);
-        const { data } = await supabase
-          .from('profiles')
-          .select('id, nickname')
-          .eq('id', session.user.id)
-          .single();
-        if (data) setProfile(data);
-      } else {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
         reset();
+      } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+        setUser(session.user);
       }
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
-  }, [setUser, setProfile, setLoading, reset]);
+  }, [setUser, reset]);
 
   return <>{children}</>;
 }
