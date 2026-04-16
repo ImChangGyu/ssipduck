@@ -17,7 +17,7 @@
   --md-sys-color-on-surface: #ededf2;
   --md-sys-color-surface-variant: #1a1a22;
   --md-sys-color-on-surface-variant: #a8a8b3;
-  --md-sys-color-surface-tint: #e5b8ff;
+  --md-sys-color-surface-tint: #b4c5ff;
   --md-sys-color-surface-dim: #0b0b0f;
   --md-sys-color-surface-bright: #272732;
   --md-sys-color-surface-container-lowest: #0e0e13;
@@ -26,10 +26,10 @@
   --md-sys-color-surface-container-high: #20202a;
   --md-sys-color-surface-container-highest: #272732;
 
-  --md-sys-color-primary: #e5b8ff;
-  --md-sys-color-on-primary: #2a0c4a;
-  --md-sys-color-primary-container: #4a2e74;
-  --md-sys-color-on-primary-container: #f1deff;
+  --md-sys-color-primary: #b4c5ff;
+  --md-sys-color-on-primary: #002a78;
+  --md-sys-color-primary-container: #003ea8;
+  --md-sys-color-on-primary-container: #dbe1ff;
 
   --md-sys-color-secondary: #ffb38a;
   --md-sys-color-on-secondary: #4a1c00;
@@ -54,7 +54,7 @@
 
   --md-sys-color-inverse-surface: #ededf2;
   --md-sys-color-inverse-on-surface: #1a1a22;
-  --md-sys-color-inverse-primary: #6750a4;
+  --md-sys-color-inverse-primary: #0053db;
 }
 
 /* ─── Tailwind v4 Theme ────────────────────────────────────────────────────

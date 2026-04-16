@@ -2,8 +2,13 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { LogIn, LogOut } from 'lucide-react';
 import * as SVG from '~/assets/svg';
 import { cn } from '~/lib/utils';
+import { Button } from '~/components/ui/button';
+import { Skeleton } from '~/components/ui/skeleton';
+import { useAuthStore } from '~/store/auth';
 
 interface DefaultLayoutProps {
   children: React.ReactNode;
@@ -11,12 +16,32 @@ interface DefaultLayoutProps {
 
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const [scrolled, setScrolled] = useState(false);
+  const router = useRouter();
+  const { user, profile, isLoading, setUser, setProfile, setLoading, reset } = useAuthStore();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((res) => res.json())
+      .then(({ user, profile }) => {
+        if (user) {
+          setUser(user);
+          if (profile) setProfile(profile);
+        }
+        setLoading(false);
+      });
+  }, [setUser, setProfile, setLoading]);
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    reset();
+    router.push('/');
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -33,6 +58,27 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
         <Link href="/" className="h-full flex items-center" aria-label="홈으로">
           <SVG.SsipduckLogo />
         </Link>
+        <div className="flex-1" />
+        <div className="flex items-center gap-2">
+          {isLoading ? (
+            <Skeleton className="h-8 w-20 rounded-sm" />
+          ) : user ? (
+            <>
+              <span className="text-label-md text-on-surface-variant hidden sm:inline">
+                {profile?.nickname}
+              </span>
+              <Button variant="ghost" size="sm" onClick={handleLogout} aria-label="로그아웃">
+                <LogOut />
+                <span className="hidden sm:inline">로그아웃</span>
+              </Button>
+            </>
+          ) : (
+            <Button variant="ghost" size="sm" onClick={() => router.push('/login')} aria-label="로그인">
+              <LogIn />
+              <span className="hidden sm:inline">로그인</span>
+            </Button>
+          )}
+        </div>
       </header>
       <main>{children}</main>
     </div>
