@@ -11,7 +11,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tokens:gen": "node scripts/gen-tokens.mjs"
+    "tokens:gen": "node scripts/gen-tokens.mjs",
+    "colors:gen": "node scripts/gen-colors.mjs"
   },
   "dependencies": {
     "@apollo/client": "^3.11.0",
@@ -37,6 +38,7 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
+    "@material/material-color-utilities": "^0.2.7",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19.0.0",

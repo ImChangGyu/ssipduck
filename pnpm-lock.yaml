@@ -76,6 +76,9 @@ importers:
         specifier: ^4.5.4
         version: 4.5.4(@types/react@19.2.14)(react@19.2.5)
     devDependencies:
+      '@material/material-color-utilities':
+        specifier: ^0.2.7
+        version: 0.2.7
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.2.2
@@ -372,6 +375,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@material/material-color-utilities@0.2.7':
+    resolution: {integrity: sha512-0FCeqG6WvK4/Cc06F/xXMd/pv4FeisI0c1tUpBbfhA2n9Y8eZEv4Karjbmf2ZqQCPUWMrGp8A571tCjizxoTiQ==}
 
   '@next/env@15.5.15':
     resolution: {integrity: sha512-vcmyu5/MyFzN7CdqRHO3uHO44p/QPCZkuTUXroeUmhNP8bL5PHFEhik22JUazt+CDDoD6EpBYRCaS2pISL+/hg==}
@@ -3339,6 +3345,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@material/material-color-utilities@0.2.7': {}
 
   '@next/env@15.5.15': {}
 
