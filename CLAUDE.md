@@ -114,9 +114,9 @@ import * as SVG from '~/assets/svg';
 
 ## 토큰 소스 동기화
 
-- `material3_variables.json` 이 업데이트되면 `pnpm tokens:gen` 을 재실행한다.
+- **색상 변경** → `M3_SEED=#RRGGBB pnpm colors:gen` 재실행. 스크립트: `scripts/gen-colors.mjs`. Seed 상수는 스크립트 상단 `SEED` 변수.
+- **Shape / Typography / Elevation 변경** → Figma Variables JSON export 후 `pnpm tokens:gen` 재실행. 스크립트: `scripts/gen-tokens.mjs`.
 - `src/styles/tokens/*.css` 는 **생성물**이다. 수동으로 편집하지 않는다.
-- 스크립트: `scripts/gen-tokens.mjs`
 
 ---
 
