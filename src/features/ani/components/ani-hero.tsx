@@ -19,7 +19,6 @@ const TYPE_LABEL: Record<VariableType, string> = {
   trend:    '트렌딩',
   upcoming: '개봉 예정',
   movie:    '극장판',
-  favorite: '즐겨찾기',
 };
 
 export default function AniHero({ type }: AniHeroProps) {
@@ -45,7 +44,7 @@ export default function AniHero({ type }: AniHeroProps) {
 
   return (
     <div
-      className="relative w-full overflow-hidden"
+      className="relative w-full overflow-hidden isolate"
       style={{ minHeight: 'min(65vh, 560px)' }}
     >
       {/* Backdrop */}

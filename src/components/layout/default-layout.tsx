@@ -47,7 +47,7 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
     <div className="min-h-screen bg-background">
       <header
         className={cn(
-          'w-full h-16 sticky top-0 z-30',
+          'w-full h-16 sticky top-0 z-50',
           'px-4 sm:px-6 lg:px-8 xl:px-12 flex items-center',
           'transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300',
           scrolled

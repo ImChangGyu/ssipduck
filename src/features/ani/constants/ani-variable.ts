@@ -71,15 +71,13 @@ export const ANI_VARIABLES = (page: number, search?: string) => ({
       format: 'MOVIE',
     };
   },
-  favorite() {
-    if (typeof window === 'undefined') return { id_in: [] };
-
-    const favoriteAniIdList =
-      JSON.parse(localStorage.getItem('favorite-ani-list') ?? '').state
-        .favoriteAniIdList ?? [];
-
-    return {
-      id_in: favoriteAniIdList,
-    };
-  },
 });
+
+export function bookmarkVariables(ids: number[]) {
+  return {
+    isAdult: false,
+    type: 'ANIME',
+    page: 1,
+    id_in: ids,
+  };
+}

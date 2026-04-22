@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { VariableType } from '~/types/ani';
 
-const VALID_TYPES: VariableType[] = ['popular', 'trend', 'upcoming', 'movie', 'favorite'];
+const VALID_TYPES: VariableType[] = ['popular', 'trend', 'upcoming', 'movie'];
 const DEFAULT_TYPE: VariableType = 'popular';
 
 function isValidType(value: string | null): value is VariableType {

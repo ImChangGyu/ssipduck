@@ -62,7 +62,7 @@ export default function Player({ url, placeholderImage }: PlayerProps) {
             size="icon"
             onClick={togglePlayerMutedState}
             aria-label={muted ? '음소거 해제' : '음소거'}
-            className="absolute bottom-14 right-4 z-20 size-10 rounded-full bg-black/30 text-white hover:bg-black/50"
+            className="absolute bottom-14 right-4 z-40 size-10 rounded-full bg-black/30 text-white hover:bg-black/50"
           >
             {muted ? <VolumeX /> : <Volume2 />}
           </Button>

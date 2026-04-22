@@ -4,15 +4,18 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { Badge } from '~/components/ui/badge';
 import { Card } from '~/components/ui/card';
-import FavoriteAni from '~/features/ani/components/favorite-ani';
+import RatingStars from '~/components/ui/rating-stars';
+import BookmarkButton from '~/features/ani/components/bookmark-button';
 import useLogger from '~/hooks/useLogger';
 import { AniItemType } from '~/types/ani';
 
 interface AniItemProps {
   ani: AniItemType;
+  /** 플랫폼 평균 평점 (1~10 스케일) */
+  platformAvgScore?: number;
 }
 
-export default function AniItem({ ani }: AniItemProps) {
+export default function AniItem({ ani, platformAvgScore }: AniItemProps) {
   const router = useRouter();
   const pathname = usePathname();
   const logger = useLogger();
@@ -52,7 +55,7 @@ export default function AniItem({ ani }: AniItemProps) {
           </h3>
         </div>
 
-        {/* Meta (genre + favorite) — fade-in on hover */}
+        {/* Meta (genre + bookmark) — fade-in on hover */}
         <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-2
           opacity-0 translate-y-2
           group-hover:opacity-100 group-hover:translate-y-0
@@ -72,8 +75,11 @@ export default function AniItem({ ani }: AniItemProps) {
             </div>
           )}
 
-          <div onClick={(e) => e.stopPropagation()} className="-ml-2">
-            <FavoriteAni aniId={ani.id} />
+          <div className="flex items-center justify-between">
+            <RatingStars score={platformAvgScore != null ? platformAvgScore / 2 : 0} size="sm" />
+            <div onClick={(e) => e.stopPropagation()} className="-mr-2 ml-auto">
+              <BookmarkButton aniId={ani.id} />
+            </div>
           </div>
         </div>
       </div>

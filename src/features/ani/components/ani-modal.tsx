@@ -12,7 +12,8 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import Player from "~/components/ui/player/player";
-import FavoriteAni from "~/features/ani/components/favorite-ani";
+import BookmarkButton from "~/features/ani/components/bookmark-button";
+import RatingInput from "~/features/ani/components/rating-input";
 import AniListWithTitle from "~/features/ani/components/ani-list-with-title";
 import useGetAniById from "~/features/ani/api/get-ani-by-id";
 import { stripTag, trailerUrl } from "~/utils/formatter";
@@ -117,13 +118,13 @@ export default function AniModal({ aniId }: AniModalProps) {
                 </div>
               </div>
 
-              {/* Title + favorite */}
+              {/* Title + bookmark */}
               <div className="flex flex-col gap-2 flex-1 min-w-0">
                 <div className="flex items-start gap-2">
                   <h2 className="text-headline-md md:text-headline-lg font-bold text-on-surface leading-tight flex-1 text-balance">
                     {ani.title.romaji}
                   </h2>
-                  <FavoriteAni aniId={ani.id} />
+                  <BookmarkButton aniId={ani.id} />
                 </div>
 
                 {/* Genre badges */}
@@ -138,6 +139,9 @@ export default function AniModal({ aniId }: AniModalProps) {
                 )}
               </div>
             </div>
+
+            {/* Rating */}
+            <RatingInput aniId={ani.id} />
 
             {/* Description */}
             {description && (

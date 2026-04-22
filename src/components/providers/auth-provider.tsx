@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { createClient } from '~/lib/supabase/client';
 import { useAuthStore } from '~/store/auth';
+import { BookmarkRatingHydrator } from '~/components/providers/bookmark-rating-hydrator';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { setUser, reset } = useAuthStore();
@@ -24,5 +25,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, [setUser, reset]);
 
-  return <>{children}</>;
+  return (
+    <>
+      <BookmarkRatingHydrator />
+      {children}
+    </>
+  );
 }

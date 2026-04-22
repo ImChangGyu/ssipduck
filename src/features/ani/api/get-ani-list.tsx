@@ -2,7 +2,7 @@ import { gql, useSuspenseQuery } from '@apollo/client';
 import { ANI_VARIABLES } from '~/features/ani/constants/ani-variable';
 import { AniItemType, VariableType } from '~/types/ani';
 
-const getAniListQuery = gql`
+export const getAniListQuery = gql`
   query Query(
     $page: Int
     $isAdult: Boolean

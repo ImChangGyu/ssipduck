@@ -18,7 +18,6 @@ const FILTER_OPTIONS: { value: VariableType; label: string; emoji: string }[] = 
   { value: 'trend',    label: 'Trend',    emoji: '📈' },
   { value: 'upcoming', label: 'Upcoming', emoji: '🗓️' },
   { value: 'movie',    label: 'Movie',    emoji: '🎬' },
-  { value: 'favorite', label: 'Favorite', emoji: '⭐' },
 ];
 
 const DEFAULT_TYPE: VariableType = 'popular';

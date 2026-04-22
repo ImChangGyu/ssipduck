@@ -51,7 +51,7 @@ export default function Ani() {
   return (
     <>
       {/* Hero: only when not searching */}
-      {!q && type !== 'favorite' && (
+      {!q && (
         <Suspense fallback={<AniHeroSkeleton />}>
           <AniHero type={type} />
         </Suspense>
