@@ -2,12 +2,65 @@ import * as React from 'react';
 
 function SsipduckLogo(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg width={41} height={24} fill="none" {...props}>
-      <circle cx={12.5} cy={6.5} r={5.5} stroke="#fff" />
-      <circle cx={28.5} cy={6.5} r={5.5} stroke="#fff" />
-      <path fill="#fff" d="M18 6h5v2h-5zM3 6h5v2H3zM33 6h5v2h-5z" />
-      <path stroke="#fff" d="M4 12h33v4H4zM1 16h39v7H1z" />
-      <path d="M29 17h2v5h-2zM33 17h2v5h-2z" />
+    <svg width="44" height="44" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <defs>
+        <linearGradient id="nGMain" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#dce7ff" />
+          <stop offset="50%" stopColor="#b4c5ff" />
+          <stop offset="100%" stopColor="#8fa8ff" />
+        </linearGradient>
+        <linearGradient id="nGSharp" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="100%" stopColor="#b4c5ff" />
+        </linearGradient>
+        <radialGradient id="nGBg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#b4c5ff" stopOpacity="0.55" />
+          <stop offset="50%" stopColor="#b4c5ff" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="#b4c5ff" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id="nGDot" cx="35%" cy="30%" r="65%">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="40%" stopColor="#b4c5ff" />
+          <stop offset="100%" stopColor="#6a8fe0" />
+        </radialGradient>
+        <linearGradient id="nGWhite" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stopColor="rgba(255,255,255,0.0)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0.18)" />
+        </linearGradient>
+        <filter id="nGlow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="8" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <filter id="nSGlow" x="-25%" y="-25%" width="150%" height="150%">
+          <feGaussianBlur stdDeviation="2.5" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <rect width="200" height="200" rx="38" fill="#08081a" />
+      <circle cx="100" cy="102" r="80" fill="url(#nGBg)" />
+      <circle cx="100" cy="102" r="80" fill="none" stroke="#b4c5ff" strokeWidth="1.5" opacity="0.45" />
+      <circle cx="100" cy="102" r="62" fill="none" stroke="#b4c5ff" strokeWidth="1.2" opacity="0.3" />
+      <circle cx="100" cy="102" r="44" fill="none" stroke="#b4c5ff" strokeWidth="1" opacity="0.2" />
+      <circle cx="100" cy="102" r="26" fill="none" stroke="#b4c5ff" strokeWidth="0.8" opacity="0.14" />
+      <g transform="skewX(-8)">
+        <line x1="66" y1="44" x2="66" y2="158" stroke="url(#nGMain)" strokeWidth="14" strokeLinecap="round" />
+        <line x1="50" y1="158" x2="84" y2="158" stroke="url(#nGMain)" strokeWidth="10" strokeLinecap="round" />
+        <line x1="50" y1="44" x2="84" y2="44" stroke="url(#nGMain)" strokeWidth="10" strokeLinecap="round" />
+        <line x1="58" y1="108" x2="142" y2="88" stroke="url(#nGSharp)" strokeWidth="9" strokeLinecap="round" opacity="0.9" />
+        <path d="M108 48 Q162 48 162 102 Q162 156 108 156" stroke="url(#nGMain)" strokeWidth="14" fill="none" strokeLinecap="round" />
+        <circle cx="162" cy="48" r="22" fill="#b4c5ff" opacity="0.18" filter="url(#nGlow)" />
+        <circle cx="162" cy="48" r="14" fill="url(#nGDot)" filter="url(#nSGlow)" />
+        <circle cx="162" cy="48" r="14" fill="none" stroke="white" strokeWidth="1.5" opacity="0.4" />
+        <ellipse cx="157" cy="43" rx="5" ry="4" fill="white" opacity="0.7" />
+        <circle cx="168" cy="54" r="2" fill="white" opacity="0.45" />
+      </g>
+      <rect width="200" height="200" rx="38" fill="url(#nGWhite)" />
     </svg>
   );
 }
