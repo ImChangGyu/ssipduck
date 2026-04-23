@@ -9,6 +9,7 @@ import { cn } from '~/lib/utils';
 import { Button } from '~/components/ui/button';
 import { Skeleton } from '~/components/ui/skeleton';
 import { useAuthStore } from '~/store/auth';
+import InitialAvatar from '~/features/profile/components/initial-avatar';
 
 interface DefaultLayoutProps {
   children: React.ReactNode;
@@ -64,9 +65,18 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
             <Skeleton className="h-8 w-20 rounded-sm" />
           ) : user ? (
             <>
-              <span className="text-label-md text-on-surface-variant hidden sm:inline">
-                {profile?.nickname}
-              </span>
+              <Link
+                href="/profile"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                aria-label="내 프로필"
+              >
+                {profile?.nickname && (
+                  <InitialAvatar nickname={profile.nickname} size="sm" />
+                )}
+                <span className="text-label-md text-on-surface-variant hidden sm:inline">
+                  {profile?.nickname}
+                </span>
+              </Link>
               <Button variant="ghost" size="sm" onClick={handleLogout} aria-label="로그아웃">
                 <LogOut />
                 <span className="hidden sm:inline">로그아웃</span>

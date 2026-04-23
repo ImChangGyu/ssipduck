@@ -4,6 +4,7 @@ import type { User } from '@supabase/supabase-js';
 interface Profile {
   id: string;
   nickname: string;
+  bio: string | null;
 }
 
 interface AuthStore {

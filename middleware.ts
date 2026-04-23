@@ -2,6 +2,8 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 const PROTECTED_ROUTES = ['/bookmarks', '/ratings'];
+// /profile 정확 일치만 보호 (타인 프로필 /profile/[id]는 공개)
+const PROTECTED_EXACT = ['/profile'];
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -35,7 +37,8 @@ export async function middleware(request: NextRequest) {
   // 미인증 사용자의 보호된 라우트 접근 차단
   if (
     !user &&
-    PROTECTED_ROUTES.some((r) => request.nextUrl.pathname.startsWith(r))
+    (PROTECTED_ROUTES.some((r) => request.nextUrl.pathname.startsWith(r)) ||
+      PROTECTED_EXACT.some((r) => request.nextUrl.pathname === r))
   ) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';

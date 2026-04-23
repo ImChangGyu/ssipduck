@@ -24,7 +24,7 @@ export default function AniStaticGrid({ items, scores, platformStats }: AniStati
   return (
     <div className="w-full grid gap-4 grid-cols-list px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8">
       {items.map((ani, index) => (
-        <div key={`ani-static_${ani.id}_${index}`} className="flex flex-col gap-1">
+        <div key={`ani-static_${ani.id}_${index}`} className="flex flex-col gap-3">
           <AniItem ani={ani} platformAvgScore={platformStats?.[ani.id]} />
           {scores?.[ani.id] !== undefined && (
             <div className="flex items-center gap-1 px-1">
