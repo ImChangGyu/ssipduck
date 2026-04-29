@@ -137,6 +137,23 @@ import * as SVG from '~/assets/svg';
 
 ---
 
+## Git / GitHub 계정 규칙
+
+커밋 또는 푸시 전에 반드시 아래 명령으로 active 계정을 확인한다.
+
+```bash
+gh auth status
+```
+
+- `github.com` 의 active account가 **`ImChangGyu`** 인지 확인.
+- 다른 계정이 active라면 먼저 전환 후 진행:
+  ```bash
+  gh auth switch -u ImChangGyu
+  ```
+- 확인 없이 커밋·푸시하지 않는다.
+
+---
+
 ## 금지 사항 요약
 
 | 금지 | 이유 |
