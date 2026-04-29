@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { Skeleton } from '~/components/ui/skeleton';
 import AniListSkeleton from '~/components/ui/skeleton/ani-list-skeleton';
-import SearchAni from '~/features/ani/components/search-ani';
+import AniFilter from '~/features/ani/components/ani-filter';
 import { useAniFilterParams } from '~/features/ani/hooks/use-ani-filter-params';
 
 const AniModalSkeleton = dynamic(
@@ -44,32 +44,24 @@ function AniHeroSkeleton() {
 }
 
 export default function Ani() {
-  const { type, q, setType, setQ } = useAniFilterParams();
+  const { type, setType } = useAniFilterParams();
   const searchParams = useSearchParams();
   const aniId = searchParams.get('ani-id');
 
   return (
     <>
-      {/* Hero: only when not searching */}
-      {!q && (
-        <Suspense fallback={<AniHeroSkeleton />}>
-          <AniHero type={type} />
-        </Suspense>
-      )}
+      <Suspense fallback={<AniHeroSkeleton />}>
+        <AniHero type={type} />
+      </Suspense>
 
-      {/* Sticky search + filter */}
-      <div className="sticky top-16 z-20 bg-background/85 backdrop-blur-md border-b border-outline-variant/50">
-        <SearchAni
-          q={q}
-          type={type}
-          onQueryChange={setQ}
-          onTypeChange={setType}
-        />
+      {/* Filter bar */}
+      <div className="px-4 sm:px-6 lg:px-8 xl:px-12 py-3 flex justify-end">
+        <AniFilter value={type} onChange={setType} />
       </div>
 
       {/* Grid */}
       <Suspense fallback={<AniListSkeleton />}>
-        <AniList variableType={type} searchKeyword={q || undefined} />
+        <AniList variableType={type} />
       </Suspense>
 
       {aniId && <AniModal aniId={aniId} />}

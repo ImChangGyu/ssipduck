@@ -9,21 +9,20 @@ import AniItem from '~/features/ani/components/ani-item';
 
 interface AniListProps {
   variableType: VariableType;
-  searchKeyword?: string;
 }
 
-export default function AniList({ variableType, searchKeyword }: AniListProps) {
+export default function AniList({ variableType }: AniListProps) {
   const {
     data: {
       Page: { media: aniList },
     },
     fetchMore,
-  } = useAniList({ variableType, searchKeyword });
+  } = useAniList({ variableType });
 
   const { ref } = useInfiniteScroll((page) => {
     startTransition(() => {
       fetchMore({
-        variables: ANI_VARIABLES(page, searchKeyword)[variableType](),
+        variables: ANI_VARIABLES(page)[variableType](),
         updateQuery: getAniListByPage,
       });
     });

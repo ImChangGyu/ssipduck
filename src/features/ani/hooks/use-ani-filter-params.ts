@@ -18,14 +18,11 @@ export function useAniFilterParams() {
 
   const rawType = searchParams.get('type');
   const type: VariableType = isValidType(rawType) ? rawType : DEFAULT_TYPE;
-  const q = searchParams.get('q') ?? '';
 
   const buildUrl = useCallback(
-    (nextType: VariableType, nextQ: string) => {
+    (nextType: VariableType) => {
       const params = new URLSearchParams();
       params.set('type', nextType);
-      if (nextQ) params.set('q', nextQ);
-      // Preserve ani-id if present
       const aniId = searchParams.get('ani-id');
       if (aniId) params.set('ani-id', aniId);
       return `${pathname}?${params.toString()}`;
@@ -35,20 +32,11 @@ export function useAniFilterParams() {
 
   const setType = useCallback(
     (nextType: VariableType) => {
-      // When switching type, clear search query and reset scroll
-      router.replace(buildUrl(nextType, ''));
+      router.replace(buildUrl(nextType));
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     [router, buildUrl]
   );
 
-  const setQ = useCallback(
-    (nextQ: string) => {
-      router.replace(buildUrl(type, nextQ));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    },
-    [router, buildUrl, type]
-  );
-
-  return { type, q, setType, setQ };
+  return { type, setType };
 }
