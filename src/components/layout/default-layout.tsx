@@ -10,6 +10,7 @@ import { Button } from '~/components/ui/button';
 import { Skeleton } from '~/components/ui/skeleton';
 import { useAuthStore } from '~/store/auth';
 import InitialAvatar from '~/features/profile/components/initial-avatar';
+import HeaderSearch from '~/features/search/components/header-search';
 
 interface DefaultLayoutProps {
   children: React.ReactNode;
@@ -59,7 +60,8 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
         <Link href="/" className="h-full flex items-center" aria-label="홈으로">
           <SVG.SsipduckLogo />
         </Link>
-        <div className="flex-1" />
+        <div className="flex-1 md:hidden" />
+        <HeaderSearch />
         <div className="flex items-center gap-2">
           {isLoading ? (
             <Skeleton className="h-8 w-20 rounded-sm" />
