@@ -70,7 +70,7 @@ export default function AniModal({ aniId }: AniModalProps) {
           {/* Hero: trailer or banner */}
           <div className="relative w-full">
             {hasTrailer ? (
-              <div className="w-full aspect-video rounded-t-xl overflow-hidden">
+              <div className="w-full aspect-video sm:rounded-t-xl overflow-hidden">
                 <Player
                   url={trailerUrl(
                     ani.trailer?.id ?? "",
@@ -80,7 +80,7 @@ export default function AniModal({ aniId }: AniModalProps) {
                 />
               </div>
             ) : bgImage ? (
-              <div className="relative w-full h-[300px] md:h-[380px] rounded-t-xl overflow-hidden bg-surface-container">
+              <div className="relative w-full h-[300px] md:h-[380px] sm:rounded-t-xl overflow-hidden bg-surface-container">
                 <Image
                   src={bgImage}
                   fill
