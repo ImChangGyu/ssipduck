@@ -17,8 +17,13 @@ import BookmarkButton from "~/features/ani/components/bookmark-button";
 import RatingInput from "~/features/ani/components/rating-input";
 import RatingStars from "~/components/ui/rating-stars";
 import AniListWithTitle from "~/features/ani/components/ani-list-with-title";
+import CommentInput from "~/features/ani/components/comment-input";
+import CommentList from "~/features/ani/components/comment-list";
 import useGetAniById from "~/features/ani/api/get-ani-by-id";
+import { useAuthStore } from "~/store/auth";
+import { useRatingStore } from "~/store/rating";
 import { stripTag, trailerUrl } from "~/utils/formatter";
+import type { CommentItem } from "~/features/ani/types/comment";
 
 interface AniModalProps {
   aniId: string;
@@ -28,7 +33,11 @@ export default function AniModal({ aniId }: AniModalProps) {
   const router = useRouter();
   const pathname = usePathname();
 
+  const user = useAuthStore((s) => s.user);
+  const currentScore = useRatingStore((s) => s.get(Number(aniId)));
+
   const [platformStats, setPlatformStats] = useState<{ avgScore: number; ratingCount: number } | null>(null);
+  const [comments, setComments] = useState<CommentItem[]>([]);
 
   useEffect(() => {
     fetch(`/api/ratings/stats?aniIds=${aniId}`)
@@ -40,6 +49,21 @@ export default function AniModal({ aniId }: AniModalProps) {
       .catch(() => {});
   }, [aniId]);
 
+  useEffect(() => {
+    fetch(`/api/comments?aniId=${aniId}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d.comments)) setComments(d.comments);
+      })
+      .catch(() => {});
+  }, [aniId]);
+
+  // 평점이 삭제되면 내 댓글도 로컬에서 제거 (DB CASCADE 반영)
+  useEffect(() => {
+    if (!user || currentScore !== undefined) return;
+    setComments((prev) => prev.filter((c) => c.userId !== user.id));
+  }, [currentScore, user]);
+
   const {
     data: { Media: ani },
   } = useGetAniById(aniId);
@@ -47,6 +71,20 @@ export default function AniModal({ aniId }: AniModalProps) {
   const onExit = () => {
     router.push(pathname, { scroll: false });
   };
+
+  const myComment = user ? (comments.find((c) => c.userId === user.id) ?? null) : null;
+  const otherComments = user ? comments.filter((c) => c.userId !== user.id) : comments;
+
+  function handleCommentChange(updated: CommentItem | null) {
+    setComments((prev) => {
+      if (updated === null) {
+        return prev.filter((c) => c.userId !== user!.id);
+      }
+      const exists = prev.some((c) => c.userId === updated.userId);
+      if (exists) return prev.map((c) => (c.userId === updated.userId ? updated : c));
+      return [updated, ...prev];
+    });
+  }
 
   const hasTrailer = Boolean(ani.trailer?.id);
   const bgImage = ani.bannerImage || ani.coverImage.extraLarge;
@@ -166,7 +204,16 @@ export default function AniModal({ aniId }: AniModalProps) {
                 </span>
               </div>
             )}
-            <RatingInput aniId={ani.id} />
+
+            {/* 내 평점 + 댓글 입력 */}
+            <div className="flex flex-col gap-3">
+              <RatingInput aniId={ani.id} />
+              <CommentInput
+                aniId={ani.id}
+                myComment={myComment}
+                onCommentChange={handleCommentChange}
+              />
+            </div>
 
             {/* Description */}
             {description && (
@@ -183,6 +230,23 @@ export default function AniModal({ aniId }: AniModalProps) {
                 (node) => node.mediaRecommendation,
               )}
             />
+
+            {/* 댓글 목록 */}
+            <div className="flex flex-col gap-4">
+              <h3 className="text-title-md font-semibold text-on-surface">
+                댓글
+                {comments.length > 0 && (
+                  <span className="text-on-surface-variant font-normal ml-1.5">
+                    {comments.length}
+                  </span>
+                )}
+              </h3>
+              {otherComments.length === 0 && !myComment ? (
+                <p className="text-body-md text-on-surface-variant">아직 댓글이 없습니다.</p>
+              ) : (
+                <CommentList comments={otherComments} />
+              )}
+            </div>
           </div>
         </div>
       </DialogContent>

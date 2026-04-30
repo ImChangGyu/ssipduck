@@ -14,6 +14,38 @@ export type Database = {
   }
   public: {
     Tables: {
+      comments: {
+        Row: {
+          ani_id: number
+          content: string
+          created_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ani_id: number
+          content: string
+          created_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ani_id?: number
+          content?: string
+          created_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_user_id_ani_id_fkey"
+            columns: ["user_id", "ani_id"]
+            isOneToOne: true
+            referencedRelation: "ratings"
+            referencedColumns: ["user_id", "ani_id"]
+          }
+        ]
+      }
       bookmarks: {
         Row: {
           ani_id: number
