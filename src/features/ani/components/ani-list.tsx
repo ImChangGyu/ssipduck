@@ -28,8 +28,7 @@ export default function AniList({ variableType }: AniListProps) {
     });
   });
 
-  // 플랫폼 평균 평점 (aniId → avgScore 1~10)
-  const [statsMap, setStatsMap] = useState<Map<number, number>>(new Map());
+  const [statsMap, setStatsMap] = useState<Map<number, { avgScore: number; ratingCount: number }>>(new Map());
   const fetchedIdsRef = useRef<string>('');
 
   useEffect(() => {
@@ -43,7 +42,7 @@ export default function AniList({ variableType }: AniListProps) {
       .then((d) => {
         setStatsMap((prev) => {
           const next = new Map(prev);
-          for (const s of d.stats ?? []) next.set(s.aniId, s.avgScore);
+          for (const s of d.stats ?? []) next.set(s.aniId, { avgScore: s.avgScore, ratingCount: s.ratingCount });
           return next;
         });
       })
@@ -56,7 +55,8 @@ export default function AniList({ variableType }: AniListProps) {
         <AniItem
           ani={ani}
           key={`ani-item_${ani.id}_${index}`}
-          platformAvgScore={statsMap.get(ani.id)}
+          platformAvgScore={statsMap.get(ani.id)?.avgScore}
+          platformRatingCount={statsMap.get(ani.id)?.ratingCount}
         />
       ))}
       <div ref={ref} className="col-span-full" />

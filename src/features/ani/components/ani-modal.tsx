@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Badge } from "~/components/ui/badge";
@@ -14,6 +15,7 @@ import {
 import Player from "~/components/ui/player/player";
 import BookmarkButton from "~/features/ani/components/bookmark-button";
 import RatingInput from "~/features/ani/components/rating-input";
+import RatingStars from "~/components/ui/rating-stars";
 import AniListWithTitle from "~/features/ani/components/ani-list-with-title";
 import useGetAniById from "~/features/ani/api/get-ani-by-id";
 import { stripTag, trailerUrl } from "~/utils/formatter";
@@ -25,6 +27,18 @@ interface AniModalProps {
 export default function AniModal({ aniId }: AniModalProps) {
   const router = useRouter();
   const pathname = usePathname();
+
+  const [platformStats, setPlatformStats] = useState<{ avgScore: number; ratingCount: number } | null>(null);
+
+  useEffect(() => {
+    fetch(`/api/ratings/stats?aniIds=${aniId}`)
+      .then((r) => r.json())
+      .then((d) => {
+        const s = d.stats?.[0];
+        if (s) setPlatformStats({ avgScore: s.avgScore, ratingCount: s.ratingCount });
+      })
+      .catch(() => {});
+  }, [aniId]);
 
   const {
     data: { Media: ani },
@@ -141,6 +155,17 @@ export default function AniModal({ aniId }: AniModalProps) {
             </div>
 
             {/* Rating */}
+            {platformStats && platformStats.ratingCount > 0 && (
+              <div className="flex items-center gap-2">
+                <RatingStars score={platformStats.avgScore / 2} size="sm" />
+                <span className="text-label-lg text-on-surface font-medium">
+                  {(platformStats.avgScore / 2).toFixed(1)}
+                </span>
+                <span className="text-body-sm text-on-surface-variant">
+                  · {platformStats.ratingCount.toLocaleString()}명
+                </span>
+              </div>
+            )}
             <RatingInput aniId={ani.id} />
 
             {/* Description */}

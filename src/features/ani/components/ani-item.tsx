@@ -13,9 +13,10 @@ interface AniItemProps {
   ani: AniItemType;
   /** 플랫폼 평균 평점 (1~10 스케일) */
   platformAvgScore?: number;
+  platformRatingCount?: number;
 }
 
-export default function AniItem({ ani, platformAvgScore }: AniItemProps) {
+export default function AniItem({ ani, platformAvgScore, platformRatingCount }: AniItemProps) {
   const router = useRouter();
   const pathname = usePathname();
   const logger = useLogger();
@@ -76,7 +77,19 @@ export default function AniItem({ ani, platformAvgScore }: AniItemProps) {
           )}
 
           <div className="flex items-center justify-between">
-            <RatingStars score={platformAvgScore != null ? platformAvgScore / 2 : 0} size="sm" />
+            <div className="flex items-center gap-1.5">
+              <RatingStars score={platformAvgScore != null ? platformAvgScore / 2 : 0} size="sm" />
+              {platformAvgScore != null && (
+                <span className="text-label-sm text-white/80 leading-none">
+                  {(platformAvgScore / 2).toFixed(1)}
+                </span>
+              )}
+              {platformRatingCount != null && platformRatingCount > 0 && (
+                <span className="text-label-sm text-white/50 leading-none">
+                  ({platformRatingCount})
+                </span>
+              )}
+            </div>
             <div onClick={(e) => e.stopPropagation()} className="-mr-2 ml-auto">
               <BookmarkButton aniId={ani.id} />
             </div>
