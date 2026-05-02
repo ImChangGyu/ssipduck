@@ -3,20 +3,24 @@
 import { useRef, useState } from 'react';
 import { Star } from 'lucide-react';
 import { cn } from '~/lib/utils';
-import { useAuthStore } from '~/store/auth';
-import { useRatingStore } from '~/store/rating';
+import { useMeQuery } from '~/features/auth/api/get-me';
+import { useMyRating } from '~/features/rating/api/get-ratings';
+import { useUpsertRatingMutation } from '~/features/rating/api/upsert-rating';
+import { useDeleteRatingMutation } from '~/features/rating/api/delete-rating';
 
 interface RatingInputProps {
   aniId: number;
 }
 
 export default function RatingInput({ aniId }: RatingInputProps) {
-  const user = useAuthStore((s) => s.user);
-  const { get, set: setScore, clear } = useRatingStore();
-  const currentScore = get(aniId); // 1~10
+  const { data } = useMeQuery();
+  const user = data?.user ?? null;
+  const currentScore = useMyRating(aniId, !!user);
   const [hoverScore, setHoverScore] = useState<number | null>(null);
+  const upsertMutation = useUpsertRatingMutation();
+  const deleteMutation = useDeleteRatingMutation();
 
-  const displayScore = hoverScore ?? currentScore ?? 0; // 1~10
+  const displayScore = hoverScore ?? currentScore ?? 0;
 
   const starRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -27,26 +31,14 @@ export default function RatingInput({ aniId }: RatingInputProps) {
     return isLeftHalf ? starIndex * 2 - 1 : starIndex * 2;
   }
 
-  async function handleClick(e: React.MouseEvent<HTMLButtonElement>, starIndex: number) {
+  function handleClick(e: React.MouseEvent<HTMLButtonElement>, starIndex: number) {
     if (!user) return;
     const score = getHalfScore(e, starIndex);
 
     if (score === currentScore) {
-      // 같은 점수 재클릭 → 해제
-      clear(aniId);
-      const res = await fetch(`/api/ratings?aniId=${aniId}`, { method: 'DELETE' });
-      if (!res.ok) setScore(aniId, score); // 실패 시 롤백
+      deleteMutation.mutate(aniId);
     } else {
-      setScore(aniId, score);
-      const res = await fetch('/api/ratings', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ aniId, score }),
-      });
-      if (!res.ok) {
-        if (currentScore !== undefined) setScore(aniId, currentScore);
-        else clear(aniId);
-      }
+      upsertMutation.mutate({ aniId, score });
     }
   }
 
@@ -57,9 +49,9 @@ export default function RatingInput({ aniId }: RatingInputProps) {
       <span className="text-label-sm text-on-surface-variant">내 평점</span>
       <div className="flex items-center gap-1">
         {Array.from({ length: 5 }, (_, i) => {
-          const starIndex = i + 1; // 1~5
-          const fullScore = starIndex * 2; // 2~10
-          const halfScore = fullScore - 1; // 1~9
+          const starIndex = i + 1;
+          const fullScore = starIndex * 2;
+          const halfScore = fullScore - 1;
 
           const isFull = displayScore >= fullScore;
           const isHalf = !isFull && displayScore >= halfScore;
@@ -75,9 +67,7 @@ export default function RatingInput({ aniId }: RatingInputProps) {
               onMouseLeave={() => setHoverScore(null)}
               onClick={(e) => handleClick(e, starIndex)}
             >
-              {/* 빈 별 */}
               <Star className="size-6 fill-current opacity-30" />
-              {/* 채워진 부분 */}
               {(isFull || isHalf) && (
                 <span
                   className="absolute inset-0 flex items-center justify-center overflow-hidden"

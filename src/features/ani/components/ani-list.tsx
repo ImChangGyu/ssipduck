@@ -1,11 +1,12 @@
 'use client';
 
-import { startTransition, useEffect, useRef, useState } from 'react';
+import { startTransition } from 'react';
 import { getAniListByPage, useAniList } from '~/features/ani/api/get-ani-list';
 import { VariableType } from '~/types/ani';
 import useInfiniteScroll from '~/hooks/useInfiniteScroll';
 import { ANI_VARIABLES } from '~/features/ani/constants/ani-variable';
 import AniItem from '~/features/ani/components/ani-item';
+import { useRatingsStatsQuery } from '~/features/rating/api/get-ratings-stats';
 
 interface AniListProps {
   variableType: VariableType;
@@ -28,26 +29,8 @@ export default function AniList({ variableType }: AniListProps) {
     });
   });
 
-  const [statsMap, setStatsMap] = useState<Map<number, { avgScore: number; ratingCount: number }>>(new Map());
-  const fetchedIdsRef = useRef<string>('');
-
-  useEffect(() => {
-    if (aniList.length === 0) return;
-    const idsKey = aniList.map((a) => a.id).join(',');
-    if (idsKey === fetchedIdsRef.current) return;
-    fetchedIdsRef.current = idsKey;
-
-    fetch(`/api/ratings/stats?aniIds=${idsKey}`)
-      .then((r) => r.json())
-      .then((d) => {
-        setStatsMap((prev) => {
-          const next = new Map(prev);
-          for (const s of d.stats ?? []) next.set(s.aniId, { avgScore: s.avgScore, ratingCount: s.ratingCount });
-          return next;
-        });
-      })
-      .catch(() => {});
-  }, [aniList]);
+  const aniIds = aniList.map((a) => a.id);
+  const { data: statsMap } = useRatingsStatsQuery(aniIds);
 
   return (
     <div className="w-full grid gap-4 grid-cols-list px-4 sm:px-6 lg:px-8 xl:px-12 py-6 md:py-8">

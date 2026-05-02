@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 export interface UserSearchItem {
   id: string;
@@ -8,51 +8,30 @@ export interface UserSearchItem {
   bio: string | null;
 }
 
-export function useSearchUsers(q: string) {
-  const [users, setUsers] = useState<UserSearchItem[]>([]);
-  const [hasMore, setHasMore] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const pageRef = useRef(1);
+interface SearchUsersResponse {
+  items: UserSearchItem[];
+  hasMore: boolean;
+}
 
-  useEffect(() => {
-    if (!q) {
-      setUsers([]);
-      setHasMore(false);
-      return;
-    }
+export async function getSearchUsers({
+  q,
+  page,
+}: {
+  q: string;
+  page: number;
+}): Promise<SearchUsersResponse> {
+  const res = await fetch(`/api/search/users?q=${encodeURIComponent(q)}&page=${page}`);
+  if (!res.ok) throw new Error('Failed to search users');
+  return res.json();
+}
 
-    pageRef.current = 1;
-    setLoading(true);
-
-    fetch(`/api/search/users?q=${encodeURIComponent(q)}&page=1`)
-      .then((r) => r.json())
-      .then(({ items, hasMore: more }: { items: UserSearchItem[]; hasMore: boolean }) => {
-        setUsers(items);
-        setHasMore(more);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [q]);
-
-  function loadMore() {
-    if (!q || !hasMore || loading) return;
-    const nextPage = pageRef.current + 1;
-    pageRef.current = nextPage;
-    setLoading(true);
-
-    fetch(`/api/search/users?q=${encodeURIComponent(q)}&page=${nextPage}`)
-      .then((r) => r.json())
-      .then(({ items, hasMore: more }: { items: UserSearchItem[]; hasMore: boolean }) => {
-        setUsers((prev) => {
-          const existingIds = new Set(prev.map((u) => u.id));
-          const newItems = items.filter((u: UserSearchItem) => !existingIds.has(u.id));
-          return [...prev, ...newItems];
-        });
-        setHasMore(more);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }
-
-  return { users, hasMore, loading, loadMore };
+export function useSearchUsersInfiniteQuery(q: string) {
+  return useInfiniteQuery({
+    queryKey: ['search', 'users', q],
+    queryFn: ({ pageParam }) => getSearchUsers({ q, page: pageParam }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.hasMore ? allPages.length + 1 : undefined,
+    enabled: q.trim().length > 0,
+  });
 }

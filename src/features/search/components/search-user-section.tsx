@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchUsers } from '~/features/search/api/get-search-users';
+import { useSearchUsersInfiniteQuery } from '~/features/search/api/get-search-users';
 import { Button } from '~/components/ui/button';
 import { Skeleton } from '~/components/ui/skeleton';
 import SearchUserItem from '~/features/search/components/search-user-item';
@@ -11,9 +11,12 @@ interface SearchUserSectionProps {
 }
 
 export default function SearchUserSection({ q, onClose }: SearchUserSectionProps) {
-  const { users, hasMore, loading, loadMore } = useSearchUsers(q);
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSearchUsersInfiniteQuery(q);
 
-  if (loading && users.length === 0) {
+  const users = data?.pages.flatMap((p) => p.items) ?? [];
+
+  if (isLoading && users.length === 0) {
     return (
       <div className="px-4 pt-1 pb-3 flex flex-col gap-1">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -29,7 +32,7 @@ export default function SearchUserSection({ q, onClose }: SearchUserSectionProps
     );
   }
 
-  if (!loading && users.length === 0) {
+  if (!isLoading && users.length === 0) {
     return (
       <p className="px-4 py-3 text-body-sm text-on-surface-variant">
         유저 검색 결과가 없습니다.
@@ -42,15 +45,15 @@ export default function SearchUserSection({ q, onClose }: SearchUserSectionProps
       {users.map((user) => (
         <SearchUserItem key={user.id} user={user} onClick={onClose} />
       ))}
-      {hasMore && (
+      {hasNextPage && (
         <Button
           variant="outline"
           size="sm"
           className="w-full mt-2 border-outline-variant text-on-surface-variant"
-          onClick={loadMore}
-          disabled={loading}
+          onClick={() => fetchNextPage()}
+          disabled={isFetchingNextPage}
         >
-          {loading ? '로딩 중...' : '더 보기'}
+          {isFetchingNextPage ? '로딩 중...' : '더 보기'}
         </Button>
       )}
     </div>

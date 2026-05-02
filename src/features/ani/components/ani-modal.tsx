@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Badge } from "~/components/ui/badge";
@@ -20,10 +19,10 @@ import AniListWithTitle from "~/features/ani/components/ani-list-with-title";
 import CommentInput from "~/features/ani/components/comment-input";
 import CommentList from "~/features/ani/components/comment-list";
 import useGetAniById from "~/features/ani/api/get-ani-by-id";
-import { useAuthStore } from "~/store/auth";
-import { useRatingStore } from "~/store/rating";
+import { useMeQuery } from "~/features/auth/api/get-me";
+import { useRatingsStatsQuery } from "~/features/rating/api/get-ratings-stats";
+import { useCommentsQuery } from "~/features/comment/api/get-comments";
 import { stripTag, trailerUrl } from "~/utils/formatter";
-import type { CommentItem } from "~/features/ani/types/comment";
 
 interface AniModalProps {
   aniId: string;
@@ -33,36 +32,16 @@ export default function AniModal({ aniId }: AniModalProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const user = useAuthStore((s) => s.user);
-  const currentScore = useRatingStore((s) => s.get(Number(aniId)));
+  const { data: meData } = useMeQuery();
+  const user = meData?.user ?? null;
 
-  const [platformStats, setPlatformStats] = useState<{ avgScore: number; ratingCount: number } | null>(null);
-  const [comments, setComments] = useState<CommentItem[]>([]);
+  const numericAniId = Number(aniId);
 
-  useEffect(() => {
-    fetch(`/api/ratings/stats?aniIds=${aniId}`)
-      .then((r) => r.json())
-      .then((d) => {
-        const s = d.stats?.[0];
-        if (s) setPlatformStats({ avgScore: s.avgScore, ratingCount: s.ratingCount });
-      })
-      .catch(() => {});
-  }, [aniId]);
+  const { data: statsMap } = useRatingsStatsQuery([numericAniId]);
+  const platformStats = statsMap.get(numericAniId) ?? null;
 
-  useEffect(() => {
-    fetch(`/api/comments?aniId=${aniId}`)
-      .then((r) => r.json())
-      .then((d) => {
-        if (Array.isArray(d.comments)) setComments(d.comments);
-      })
-      .catch(() => {});
-  }, [aniId]);
-
-  // 평점이 삭제되면 내 댓글도 로컬에서 제거 (DB CASCADE 반영)
-  useEffect(() => {
-    if (!user || currentScore !== undefined) return;
-    setComments((prev) => prev.filter((c) => c.userId !== user.id));
-  }, [currentScore, user]);
+  const { data: commentsData } = useCommentsQuery(numericAniId);
+  const comments = commentsData.comments;
 
   const {
     data: { Media: ani },
@@ -74,17 +53,6 @@ export default function AniModal({ aniId }: AniModalProps) {
 
   const myComment = user ? (comments.find((c) => c.userId === user.id) ?? null) : null;
   const otherComments = user ? comments.filter((c) => c.userId !== user.id) : comments;
-
-  function handleCommentChange(updated: CommentItem | null) {
-    setComments((prev) => {
-      if (updated === null) {
-        return prev.filter((c) => c.userId !== user!.id);
-      }
-      const exists = prev.some((c) => c.userId === updated.userId);
-      if (exists) return prev.map((c) => (c.userId === updated.userId ? updated : c));
-      return [updated, ...prev];
-    });
-  }
 
   const hasTrailer = Boolean(ani.trailer?.id);
   const bgImage = ani.bannerImage || ani.coverImage.extraLarge;
@@ -105,7 +73,6 @@ export default function AniModal({ aniId }: AniModalProps) {
       >
         <DialogTitle className="sr-only">{ani.title.romaji}</DialogTitle>
 
-        {/* Custom close button */}
         <DialogClose asChild>
           <Button
             variant="ghost"
@@ -117,9 +84,7 @@ export default function AniModal({ aniId }: AniModalProps) {
           </Button>
         </DialogClose>
 
-        {/* Scrollable body */}
         <div className="overflow-y-auto no-scrollbar max-h-[90vh] max-sm:max-h-none max-sm:h-full">
-          {/* Hero: trailer or banner */}
           <div className="relative w-full">
             {hasTrailer ? (
               <div className="w-full aspect-video sm:rounded-t-xl overflow-hidden">
@@ -153,11 +118,8 @@ export default function AniModal({ aniId }: AniModalProps) {
             ) : null}
           </div>
 
-          {/* Content */}
           <div className="flex flex-col gap-6 px-4 py-6 sm:px-6 md:px-8">
-            {/* Poster + Meta */}
             <div className="flex gap-5 items-start">
-              {/* Poster */}
               <div className="hidden sm:block flex-shrink-0 w-[160px] -mt-20 rounded-md overflow-hidden shadow-elevation-2 border border-outline-variant/60">
                 <div className="relative aspect-[2/3]">
                   <Image
@@ -170,7 +132,6 @@ export default function AniModal({ aniId }: AniModalProps) {
                 </div>
               </div>
 
-              {/* Title + bookmark */}
               <div className="flex flex-col gap-2 flex-1 min-w-0">
                 <div className="flex items-start gap-2">
                   <h2 className="text-headline-md md:text-headline-lg font-bold text-on-surface leading-tight flex-1 text-balance">
@@ -179,7 +140,6 @@ export default function AniModal({ aniId }: AniModalProps) {
                   <BookmarkButton aniId={ani.id} />
                 </div>
 
-                {/* Genre badges */}
                 {ani.genres.length > 0 && (
                   <div className="flex gap-2 flex-wrap">
                     {ani.genres.map((genre) => (
@@ -192,7 +152,6 @@ export default function AniModal({ aniId }: AniModalProps) {
               </div>
             </div>
 
-            {/* Rating */}
             {platformStats && platformStats.ratingCount > 0 && (
               <div className="flex items-center gap-2">
                 <RatingStars score={platformStats.avgScore / 2} size="sm" />
@@ -205,24 +164,17 @@ export default function AniModal({ aniId }: AniModalProps) {
               </div>
             )}
 
-            {/* 내 평점 + 댓글 입력 */}
             <div className="flex flex-col gap-3">
               <RatingInput aniId={ani.id} />
-              <CommentInput
-                aniId={ani.id}
-                myComment={myComment}
-                onCommentChange={handleCommentChange}
-              />
+              <CommentInput aniId={ani.id} myComment={myComment} />
             </div>
 
-            {/* Description */}
             {description && (
               <p className="text-body-md text-on-surface/85 leading-relaxed text-pretty">
                 {description}
               </p>
             )}
 
-            {/* Series & Recommendations */}
             <AniListWithTitle title="Series" aniList={ani.relations.nodes} />
             <AniListWithTitle
               title="Recommendation"
@@ -231,7 +183,6 @@ export default function AniModal({ aniId }: AniModalProps) {
               )}
             />
 
-            {/* 댓글 목록 */}
             <div className="flex flex-col gap-4">
               <h3 className="text-title-md font-semibold text-on-surface">
                 댓글

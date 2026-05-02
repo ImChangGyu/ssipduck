@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UserPlus } from 'lucide-react';
 import { signupSchema, type SignupFormValues } from '~/lib/validations/auth';
+import { useSignupMutation } from '~/features/auth/api/signup';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '~/components/ui/card';
@@ -23,8 +23,7 @@ import * as SVG from '~/assets/svg';
 
 export default function SignupPage() {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const signupMutation = useSignupMutation();
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
@@ -37,34 +36,25 @@ export default function SignupPage() {
   });
 
   async function onSubmit(values: SignupFormValues) {
-    setError(null);
-    setIsSubmitting(true);
-
-    const res = await fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try {
+      await signupMutation.mutateAsync({
         email: values.email,
         password: values.password,
         nickname: values.nickname,
         redirectTo: `${window.location.origin}/auth/callback`,
-      }),
-    });
-
-    if (!res.ok) {
-      const data = await res.json();
-      if (data.error?.includes('already registered')) {
-        setError('이미 사용 중인 이메일입니다.');
-      } else {
-        setError('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
-      }
-      setIsSubmitting(false);
-      return;
+      });
+      sessionStorage.setItem('signup_email', values.email);
+      router.push('/signup/verify');
+    } catch (err) {
+      // error handled via signupMutation.error
     }
-
-    sessionStorage.setItem('signup_email', values.email);
-    router.push('/signup/verify');
   }
+
+  const errorMessage = signupMutation.error?.message?.includes('already registered')
+    ? '이미 사용 중인 이메일입니다.'
+    : signupMutation.error
+    ? '회원가입 중 오류가 발생했습니다. 다시 시도해주세요.'
+    : null;
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
@@ -79,9 +69,9 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {error && (
+          {errorMessage && (
             <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
+              <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           )}
           <Form {...form}>
@@ -161,10 +151,10 @@ export default function SignupPage() {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={isSubmitting}
+                disabled={signupMutation.isPending}
               >
                 <UserPlus />
-                {isSubmitting ? '가입 중...' : '회원가입'}
+                {signupMutation.isPending ? '가입 중...' : '회원가입'}
               </Button>
             </form>
           </Form>

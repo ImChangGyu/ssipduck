@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { DefaultLayout } from "~/components/layout";
 import { ApolloProvider } from "~/lib/apollo-provider";
+import { QueryProvider } from "~/lib/query-provider";
 import { AuthProvider } from "~/components/providers/auth-provider";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import openGraphImage from "../../public/og-image.jpg";
@@ -69,12 +70,14 @@ export default function RootLayout({
       <body
         className={`${poppin.className} antialiased bg-background text-on-surface`}
       >
-        <ApolloProvider>
-          <AuthProvider>
-            <DefaultLayout>{children}</DefaultLayout>
-          </AuthProvider>
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID ?? ""} />
-        </ApolloProvider>
+        <QueryProvider>
+          <ApolloProvider>
+            <AuthProvider>
+              <DefaultLayout>{children}</DefaultLayout>
+            </AuthProvider>
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID ?? ""} />
+          </ApolloProvider>
+        </QueryProvider>
       </body>
     </html>
   );

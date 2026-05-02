@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useAuthStore } from "~/store/auth";
-import { useRatingStore } from "~/store/rating";
+import { useMeQuery } from "~/features/auth/api/get-me";
+import { useMyRating } from "~/features/rating/api/get-ratings";
+import { useUpsertCommentMutation } from "~/features/comment/api/upsert-comment";
+import { useDeleteCommentMutation } from "~/features/comment/api/delete-comment";
 import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
@@ -13,21 +15,19 @@ const MAX_LENGTH = 500;
 interface CommentInputProps {
   aniId: number;
   myComment: CommentItem | null;
-  onCommentChange: (updated: CommentItem | null) => void;
 }
 
-export default function CommentInput({
-  aniId,
-  myComment,
-  onCommentChange,
-}: CommentInputProps) {
-  const user = useAuthStore((s) => s.user);
-  const profile = useAuthStore((s) => s.profile);
-  const currentScore = useRatingStore((s) => s.get(aniId));
+export default function CommentInput({ aniId, myComment }: CommentInputProps) {
+  const { data: meData } = useMeQuery();
+  const user = meData?.user ?? null;
+  const profile = meData?.profile ?? null;
+  const currentScore = useMyRating(aniId, !!user);
 
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const upsertMutation = useUpsertCommentMutation();
+  const deleteMutation = useDeleteCommentMutation();
 
   if (!user) return null;
 
@@ -40,34 +40,14 @@ export default function CommentInput({
   }
 
   async function handleSubmit() {
-    if (!text.trim() || isSubmitting) return;
-    setIsSubmitting(true);
-    const res = await fetch("/api/comments", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ aniId, content: text.trim() }),
-    });
-    setIsSubmitting(false);
-    if (!res.ok) return;
-    const now = new Date().toISOString();
-    onCommentChange({
-      userId: user!.id,
-      aniId,
-      content: text.trim(),
-      score: currentScore ?? 0,
-      createdAt: myComment?.createdAt ?? now,
-      updatedAt: now,
-      profile: profile ? { nickname: profile.nickname } : null,
-    });
+    if (!text.trim() || upsertMutation.isPending) return;
+    await upsertMutation.mutateAsync({ aniId, content: text.trim() });
     setIsEditing(false);
     setText("");
   }
 
-  async function handleDelete() {
-    const res = await fetch(`/api/comments?aniId=${aniId}`, {
-      method: "DELETE",
-    });
-    if (res.ok) onCommentChange(null);
+  function handleDelete() {
+    deleteMutation.mutate(aniId);
   }
 
   if (myComment && !isEditing) {
@@ -137,7 +117,7 @@ export default function CommentInput({
           )}
           <Button
             size="sm"
-            disabled={!text.trim() || isSubmitting}
+            disabled={!text.trim() || upsertMutation.isPending}
             onClick={handleSubmit}
           >
             {isEditing ? "저장" : "등록"}

@@ -1,13 +1,13 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LogIn } from 'lucide-react';
 import { loginSchema, type LoginFormValues } from '~/lib/validations/auth';
-import { useAuthStore } from '~/store/auth';
+import { useLoginMutation } from '~/features/auth/api/login';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '~/components/ui/card';
@@ -25,9 +25,7 @@ import * as SVG from '~/assets/svg';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { setUser, setProfile, setLoading } = useAuthStore();
+  const loginMutation = useLoginMutation();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -35,34 +33,20 @@ function LoginForm() {
   });
 
   async function onSubmit(values: LoginFormValues) {
-    setError(null);
-    setIsSubmitting(true);
-
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: values.email, password: values.password }),
-    });
-
-    if (!res.ok) {
-      const data = await res.json();
-      setError(
-        data.error === 'Invalid login credentials'
-          ? '이메일 또는 비밀번호가 올바르지 않습니다.'
-          : '로그인 중 오류가 발생했습니다. 다시 시도해주세요.'
-      );
-      setIsSubmitting(false);
-      return;
+    try {
+      await loginMutation.mutateAsync({ email: values.email, password: values.password });
+      const redirectTo = searchParams.get('redirectTo') || '/';
+      router.push(redirectTo);
+    } catch (err) {
+      // error handled via loginMutation.error
     }
-
-    const { user, profile } = await res.json();
-    setUser(user);
-    if (profile) setProfile(profile);
-    setLoading(false);
-
-    const redirectTo = searchParams.get('redirectTo') || '/';
-    router.push(redirectTo);
   }
+
+  const errorMessage = loginMutation.error?.message === 'Invalid login credentials'
+    ? '이메일 또는 비밀번호가 올바르지 않습니다.'
+    : loginMutation.error
+    ? '로그인 중 오류가 발생했습니다. 다시 시도해주세요.'
+    : null;
 
   return (
     <Card className="w-full max-w-md border-none">
@@ -76,9 +60,9 @@ function LoginForm() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {error && (
+        {errorMessage && (
           <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription>{errorMessage}</AlertDescription>
           </Alert>
         )}
         <Form {...form}>
@@ -122,10 +106,10 @@ function LoginForm() {
             <Button
               type="submit"
               className="w-full"
-              disabled={isSubmitting}
+              disabled={loginMutation.isPending}
             >
               <LogIn />
-              {isSubmitting ? '로그인 중...' : '로그인'}
+              {loginMutation.isPending ? '로그인 중...' : '로그인'}
             </Button>
           </form>
         </Form>

@@ -24,7 +24,7 @@ import {
 } from '~/components/ui/form';
 import { Input } from '~/components/ui/input';
 import { Textarea } from '~/components/ui/textarea';
-import { useAuthStore } from '~/store/auth';
+import { useUpdateProfileMutation } from '~/features/profile/api/update-profile';
 
 const formSchema = z.object({
   nickname: z
@@ -43,11 +43,8 @@ interface ProfileEditDialogProps {
 
 export default function ProfileEditDialog({ currentNickname, currentBio }: ProfileEditDialogProps) {
   const [open, setOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const setProfile = useAuthStore((s) => s.setProfile);
-  const currentProfile = useAuthStore((s) => s.profile);
+  const updateMutation = useUpdateProfileMutation();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -58,26 +55,12 @@ export default function ProfileEditDialog({ currentNickname, currentBio }: Profi
   });
 
   async function onSubmit(values: FormValues) {
-    setIsSubmitting(true);
-    setError(null);
     try {
-      const res = await fetch('/api/profile', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nickname: values.nickname, bio: values.bio || null }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? '수정에 실패했습니다.');
-        return;
-      }
-      if (currentProfile) {
-        setProfile({ ...currentProfile, ...data.profile });
-      }
+      await updateMutation.mutateAsync({ nickname: values.nickname, bio: values.bio || null });
       setOpen(false);
       router.refresh();
-    } finally {
-      setIsSubmitting(false);
+    } catch (err) {
+      // error handled via updateMutation.error
     }
   }
 
@@ -126,18 +109,20 @@ export default function ProfileEditDialog({ currentNickname, currentBio }: Profi
                 </FormItem>
               )}
             />
-            {error && <p className="text-label-sm text-error">{error}</p>}
+            {updateMutation.error && (
+              <p className="text-label-sm text-error">{updateMutation.error.message}</p>
+            )}
             <div className="flex justify-end gap-2 pt-2">
               <Button
                 type="button"
                 variant="ghost"
                 onClick={() => setOpen(false)}
-                disabled={isSubmitting}
+                disabled={updateMutation.isPending}
               >
                 취소
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? '저장 중...' : '저장'}
+              <Button type="submit" disabled={updateMutation.isPending}>
+                {updateMutation.isPending ? '저장 중...' : '저장'}
               </Button>
             </div>
           </form>

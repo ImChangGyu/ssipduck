@@ -4,8 +4,10 @@ import { Bookmark } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/utils';
-import { useAuthStore } from '~/store/auth';
-import { useBookmarkStore } from '~/store/bookmark';
+import { useMeQuery } from '~/features/auth/api/get-me';
+import { useIsBookmarked } from '~/features/bookmark/api/get-bookmarks';
+import { useAddBookmarkMutation } from '~/features/bookmark/api/add-bookmark';
+import { useDeleteBookmarkMutation } from '~/features/bookmark/api/delete-bookmark';
 
 interface BookmarkButtonProps {
   aniId: number;
@@ -13,9 +15,11 @@ interface BookmarkButtonProps {
 
 export default function BookmarkButton({ aniId }: BookmarkButtonProps) {
   const router = useRouter();
-  const user = useAuthStore((s) => s.user);
-  const { has, add, remove } = useBookmarkStore();
-  const isBookmarked = has(aniId);
+  const { data } = useMeQuery();
+  const user = data?.user ?? null;
+  const isBookmarked = useIsBookmarked(aniId, !!user);
+  const addMutation = useAddBookmarkMutation();
+  const deleteMutation = useDeleteBookmarkMutation();
 
   async function handleClick(e: React.MouseEvent) {
     e.stopPropagation();
@@ -26,17 +30,9 @@ export default function BookmarkButton({ aniId }: BookmarkButtonProps) {
     }
 
     if (isBookmarked) {
-      remove(aniId);
-      const res = await fetch(`/api/bookmarks?aniId=${aniId}`, { method: 'DELETE' });
-      if (!res.ok) add(aniId); // 실패 시 롤백
+      deleteMutation.mutate(aniId);
     } else {
-      add(aniId);
-      const res = await fetch('/api/bookmarks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ aniId }),
-      });
-      if (!res.ok) remove(aniId); // 실패 시 롤백
+      addMutation.mutate(aniId);
     }
   }
 

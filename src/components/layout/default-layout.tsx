@@ -8,7 +8,8 @@ import * as SVG from '~/assets/svg';
 import { cn } from '~/lib/utils';
 import { Button } from '~/components/ui/button';
 import { Skeleton } from '~/components/ui/skeleton';
-import { useAuthStore } from '~/store/auth';
+import { useMeQuery } from '~/features/auth/api/get-me';
+import { useLogoutMutation } from '~/features/auth/api/logout';
 import InitialAvatar from '~/features/profile/components/initial-avatar';
 import HeaderSearch from '~/features/search/components/header-search';
 
@@ -19,7 +20,11 @@ interface DefaultLayoutProps {
 export default function DefaultLayout({ children }: DefaultLayoutProps) {
   const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
-  const { user, profile, isLoading, setUser, setProfile, setLoading, reset } = useAuthStore();
+  const { data, isLoading } = useMeQuery();
+  const logoutMutation = useLogoutMutation();
+
+  const user = data?.user ?? null;
+  const profile = data?.profile ?? null;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -27,21 +32,8 @@ export default function DefaultLayout({ children }: DefaultLayoutProps) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    fetch('/api/auth/me')
-      .then((res) => res.json())
-      .then(({ user, profile }) => {
-        if (user) {
-          setUser(user);
-          if (profile) setProfile(profile);
-        }
-        setLoading(false);
-      });
-  }, [setUser, setProfile, setLoading]);
-
   async function handleLogout() {
-    await fetch('/api/auth/logout', { method: 'POST' });
-    reset();
+    await logoutMutation.mutateAsync();
     router.push('/');
   }
 

@@ -1,34 +1,32 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { createClient } from '~/lib/supabase/client';
-import { useAuthStore } from '~/store/auth';
-import { BookmarkRatingHydrator } from '~/components/providers/bookmark-rating-hydrator';
+import { authKeys } from '~/features/auth/api/query-keys';
+import { bookmarkKeys } from '~/features/bookmark/api/query-keys';
+import { ratingKeys } from '~/features/rating/api/query-keys';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { setUser, reset } = useAuthStore();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const supabase = createClient();
 
-    // 토큰 갱신 감지 (세션 만료 자동 갱신)
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_OUT') {
-        reset();
-      } else if (event === 'TOKEN_REFRESHED' && session?.user) {
-        setUser(session.user);
+        queryClient.setQueryData(authKeys.me(), { user: null, profile: null });
+        queryClient.removeQueries({ queryKey: bookmarkKeys.all });
+        queryClient.removeQueries({ queryKey: ratingKeys.all });
+      } else if (event === 'TOKEN_REFRESHED') {
+        queryClient.invalidateQueries({ queryKey: authKeys.me() });
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [setUser, reset]);
+  }, [queryClient]);
 
-  return (
-    <>
-      <BookmarkRatingHydrator />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
