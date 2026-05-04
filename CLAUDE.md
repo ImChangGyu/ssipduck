@@ -5,6 +5,121 @@
 
 ---
 
+## 폴더 구조
+
+> 회사 공통 `screen/`, `apis/` 레이어는 이 프로젝트에서 **사용하지 않는다.** 차이점은 아래 전용 섹션 참조.
+
+```
+src/
+├── app/                            # Next.js App Router — 라우팅 + 서버 API 진입점
+│   ├── (page routes)/              # page.tsx, layout.tsx, error.tsx
+│   ├── api/**/route.ts             # 서버 측 Route Handler (DB/외부 API 접근)
+│   └── auth/callback/route.ts      # OAuth 콜백
+├── features/{feature}/             # 도메인별 모듈 (필요한 하위 폴더만 둔다)
+│   ├── api/                        # 클라이언트 fetcher 함수 + query-keys.ts
+│   ├── components/                 # 해당 도메인 전용 컴포넌트
+│   ├── constants/                  # 도메인 상수 (정렬·필터 옵션 등)
+│   ├── hooks/                      # 도메인 전용 훅
+│   └── types/                      # 도메인 타입
+├── components/
+│   ├── ui/                         # shadcn 기반 공통 UI 컴포넌트
+│   ├── layout/                     # 헤더·네비 등 레이아웃
+│   ├── error/                      # 에러 바운더리
+│   └── providers/                  # Provider 래퍼
+├── lib/
+│   ├── supabase/                   # {client,server,database.types}.ts
+│   ├── client.ts                   # Apollo Client (GraphQL 사용처 한정)
+│   ├── apollo-provider.tsx
+│   ├── query-provider.tsx          # TanStack Query Provider
+│   ├── design-tokens.ts
+│   └── validations/                # Zod 스키마
+├── hooks/                          # 전역 커스텀 훅 (3개 이상 feature에서 공유)
+├── store/                          # 전역 Zustand store (현재 player.ts 만 존재)
+├── utils/                          # 전역 유틸 함수
+├── types/                          # 전역 타입
+├── constants/                      # 전역 상수
+├── styles/                         # 전역 스타일 + 토큰 생성물
+├── assets/svg/                     # 브랜드 로고·일러스트 SVG
+└── icons/svg/                      # 아이콘 전용 SVG
+```
+
+---
+
+## 파일 위치 결정 가이드
+
+새 파일을 만들기 전에 아래 표를 기준으로 위치를 결정한다.
+
+| 새로 만들 파일 | 위치 | 예시 |
+|---|---|---|
+| 페이지 (라우트) | `src/app/{경로}/page.tsx` | `app/bookmarks/page.tsx` |
+| 페이지 레이아웃 | `src/app/{경로}/layout.tsx` | `app/(contents)/layout.tsx` |
+| 서버 API 엔드포인트 | `src/app/api/{경로}/route.ts` | `app/api/comments/route.ts` |
+| 클라이언트 fetcher | `src/features/{feature}/api/{verb}-{noun}.ts` | `get-ani-list.ts`, `add-bookmark.ts`, `delete-comment.ts`, `upsert-rating.ts` |
+| TanStack Query key | `src/features/{feature}/api/query-keys.ts` | `features/bookmark/api/query-keys.ts` |
+| `useQuery`/`useMutation` 호출 | **컴포넌트 안에서 직접** — 별도 `queries/` 폴더 만들지 않음 | `useQuery({ queryKey: bookmarkKeys.list(), queryFn: getBookmarks })` |
+| 도메인 전용 컴포넌트 | `src/features/{feature}/components/` | `ani-modal.tsx`, `bookmark-button.tsx` |
+| 여러 feature가 공유하는 UI | `src/components/ui/` (shadcn 우선) | — |
+| 레이아웃 컴포넌트 | `src/components/layout/` | `header.tsx`, `gnb.tsx` |
+| 도메인 상수 | `src/features/{feature}/constants/` | `ani-variable.ts` |
+| 도메인 타입 | `src/features/{feature}/types/` | `comment.ts` |
+| 도메인 훅 (URL params, 폼 등) | `src/features/{feature}/hooks/` | `use-ani-filter-params.ts` |
+| 전역 훅 | `src/hooks/` | `use-media-query.ts` |
+| 전역 Zustand store | `src/store/` | `player.ts` |
+| Supabase 클라이언트 설정 | `src/lib/supabase/` 만 수정 | `client.ts`, `server.ts` |
+| Zod 검증 스키마 | `src/lib/validations/` | `auth.ts` |
+
+---
+
+## API 레이어 규칙
+
+서버 Route Handler와 클라이언트 fetcher의 책임을 반드시 분리한다.
+
+### `app/api/**/route.ts` — 서버 진입점
+- `lib/supabase/server.ts`의 `createClient()`로 인증·DB 접근.
+- 응답은 `NextResponse.json()`.
+- 비즈니스 로직·권한 검사·에러 처리를 여기서 완결한다.
+- React 코드 import 금지.
+
+### `features/{feature}/api/*.ts` — 클라이언트 fetcher
+- 서버 API(`/api/...`) 또는 Supabase Browser 클라이언트를 호출하는 **순수 함수**.
+- React 훅 사용 금지 (훅은 컴포넌트나 `hooks/`에서).
+- 파일명은 **동사-명사 kebab-case**: `get-`, `add-`, `update-`, `delete-`, `upsert-`.
+- 확장자는 `.ts` (JSX 없음). 기존 `*.tsx` fetcher는 해당 파일 수정 시 `.ts`로 교체.
+
+### `features/{feature}/api/query-keys.ts` — Query Key 모음
+- 모든 query key를 객체 형태로 중앙 관리: `bookmarkKeys.list()`, `bookmarkKeys.byId(id)`.
+- 컴포넌트에서 key 문자열을 직접 만들지 않는다.
+
+### Provider
+- TanStack Query → `lib/query-provider.tsx`, Apollo → `lib/apollo-provider.tsx`.
+- 이미 `app/layout.tsx`에 등록됨 — 새로 만들지 않는다.
+- axios를 새로 도입하지 않는다. HTTP 클라이언트는 Supabase + Apollo로 충분.
+
+---
+
+## 네이밍 컨벤션 (신규 파일)
+
+- 모든 파일명: **kebab-case** (`ani-modal.tsx`, `use-media-query.ts`).
+- 훅 파일: `use-` prefix + kebab-case. (`useInfiniteScroll.ts` 같은 camelCase는 신규 파일에서 금지)
+- fetcher 파일명 동사: `get-` / `add-` / `update-` / `delete-` / `upsert-`.
+- 컴포넌트 export: named export 기본 (`export default` 지양).
+
+---
+
+## 회사 공통 폴더 구조와의 차이
+
+`~/.claude/skills/company-folder-structure`를 참고할 때 아래 차이를 우선한다.
+
+| 항목 | 회사 표준 | ssipduck |
+|---|---|---|
+| 페이지 조립 레이어 | `src/screen/{name}Screen/` | **없음** — `app/{route}/page.tsx`에서 직접 feature 컴포넌트 조합 |
+| HTTP 클라이언트 설정 | `src/apis/` (axios 인스턴스) | **없음** — Supabase(`lib/supabase/`) + Apollo(`lib/client.ts`) |
+| React Query 훅 분리 | `features/{x}/queries/` | **없음** — `api/`에 fetcher + query-keys 통합, 훅은 컴포넌트에서 직접 호출 |
+| 도메인 상태 | `features/{x}/store/` | **없음** — TanStack Query 캐시로 관리; 전역 UI 상태만 `src/store/` |
+| 도메인 유틸 | `features/{x}/utils/` | **없음** — 공통 유틸은 `src/utils/` |
+
+---
+
 ## 디자인 토큰 (Design Tokens)
 
 ### 색상
@@ -42,9 +157,10 @@
 ## 컴포넌트 작성 규칙
 
 ### 파일 위치
+상세 기준은 `## 파일 위치 결정 가이드` 표를 따른다. 요약:
 - UI 빌딩 블록 → `src/components/ui/` (shadcn 컴포넌트 위치)
 - 도메인 컴포넌트 → `src/features/{domain}/components/`
-- 페이지 레벨 컴포넌트 → `src/app/.../` 내 Server Component
+- 페이지 레벨 컴포넌트 → `src/app/{route}/page.tsx` (Server Component 권장)
 
 ### shadcn/ui 컴포넌트 우선 사용
 - UI 컴포넌트가 필요한 경우 **먼저 `src/components/ui/`에 설치된 shadcn 컴포넌트를 확인**한다.
