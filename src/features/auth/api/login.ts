@@ -5,6 +5,7 @@ import { authKeys } from '~/features/auth/api/query-keys';
 import { bookmarkKeys } from '~/features/bookmark/api/query-keys';
 import { ratingKeys } from '~/features/rating/api/query-keys';
 import type { MeResponse } from '~/features/auth/types/auth';
+import { track } from '~/lib/analytics';
 
 interface LoginPayload {
   email: string;
@@ -31,6 +32,7 @@ export function useLoginMutation() {
       queryClient.setQueryData(authKeys.me(), data);
       queryClient.invalidateQueries({ queryKey: bookmarkKeys.all });
       queryClient.invalidateQueries({ queryKey: ratingKeys.all });
+      track('login', { method: 'password' });
     },
   });
 }

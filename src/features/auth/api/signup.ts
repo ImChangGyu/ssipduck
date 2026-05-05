@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation } from '@tanstack/react-query';
+import { track } from '~/lib/analytics';
 
 interface SignupPayload {
   email: string;
@@ -21,5 +22,10 @@ export async function signup(payload: SignupPayload): Promise<{ success: true }>
 }
 
 export function useSignupMutation() {
-  return useMutation({ mutationFn: signup });
+  return useMutation({
+    mutationFn: signup,
+    onSuccess: () => {
+      track('sign_up', { method: 'password' });
+    },
+  });
 }

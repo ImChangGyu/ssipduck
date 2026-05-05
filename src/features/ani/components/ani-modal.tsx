@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { track } from "~/lib/analytics";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -46,6 +48,10 @@ export default function AniModal({ aniId }: AniModalProps) {
   const {
     data: { Media: ani },
   } = useGetAniById(aniId);
+
+  useEffect(() => {
+    track('view_ani_detail', { ani_id: numericAniId, ani_title: ani.title.romaji });
+  }, [numericAniId]);
 
   const onExit = () => {
     router.push(pathname, { scroll: false });

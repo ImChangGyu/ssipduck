@@ -1,8 +1,9 @@
-import { sendGAEvent } from '@next/third-parties/google';
+import { track } from '~/lib/analytics';
 
 export default function useLogger() {
-  function click({ event, value }: { event: string; value?: any }) {
-    sendGAEvent({ event, value });
+  function click({ event, value }: { event: string; value?: unknown }) {
+    track(event, value !== undefined ? { value } : undefined);
   }
-  return { click };
+
+  return { track, click };
 }

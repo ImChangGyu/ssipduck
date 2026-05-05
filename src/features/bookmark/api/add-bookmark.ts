@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { bookmarkKeys } from '~/features/bookmark/api/query-keys';
+import { track } from '~/lib/analytics';
 
 export async function addBookmark(aniId: number): Promise<{ success: true }> {
   const res = await fetch('/api/bookmarks', {
@@ -18,6 +19,9 @@ export function useAddBookmarkMutation() {
 
   return useMutation({
     mutationFn: addBookmark,
+    onSuccess: (_data, aniId) => {
+      track('add_bookmark', { ani_id: aniId });
+    },
     onMutate: async (aniId) => {
       await queryClient.cancelQueries({ queryKey: bookmarkKeys.list() });
       const previous = queryClient.getQueryData<{ aniIds: number[] }>(bookmarkKeys.list());

@@ -3,6 +3,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ratingKeys } from '~/features/rating/api/query-keys';
 import { commentKeys } from '~/features/comment/api/query-keys';
+import { track } from '~/lib/analytics';
 
 export async function deleteRating(aniId: number): Promise<{ success: true }> {
   const res = await fetch(`/api/ratings?aniId=${aniId}`, { method: 'DELETE' });
@@ -15,6 +16,9 @@ export function useDeleteRatingMutation() {
 
   return useMutation({
     mutationFn: deleteRating,
+    onSuccess: (_data, aniId) => {
+      track('unrate_ani', { ani_id: aniId });
+    },
     onMutate: async (aniId) => {
       await queryClient.cancelQueries({ queryKey: ratingKeys.list() });
       const previous = queryClient.getQueryData<{ ratings: { aniId: number; score: number }[] }>(ratingKeys.list());

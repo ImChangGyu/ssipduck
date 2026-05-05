@@ -6,6 +6,7 @@ import { ApolloProvider } from "~/lib/apollo-provider";
 import { QueryProvider } from "~/lib/query-provider";
 import { AuthProvider } from "~/components/providers/auth-provider";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import ClarityAnalytics from "~/components/analytics/clarity-analytics";
 import openGraphImage from "../../public/og-image.jpg";
 
 const poppin = Poppins({
@@ -75,6 +76,7 @@ export default function RootLayout({
             <AuthProvider>
               <DefaultLayout>{children}</DefaultLayout>
             </AuthProvider>
+            <ClarityAnalytics clarityId={process.env.NEXT_PUBLIC_CLARITY_ID ?? ""} />
             <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID ?? ""} />
           </ApolloProvider>
         </QueryProvider>

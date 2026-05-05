@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useCallback, useEffect } from 'react';
+import { track } from '~/lib/analytics';
 import { createPortal } from 'react-dom';
 import { Search, X } from 'lucide-react';
 import { Input } from '~/components/ui/input';
@@ -23,6 +24,12 @@ export default function HeaderSearch() {
   const isPanelVisible = debouncedQ.trim().length > 0;
 
   useEffect(() => { setMounted(true); }, []);
+
+  useEffect(() => {
+    if (debouncedQ.trim()) {
+      track('search', { search_term: debouncedQ.trim() });
+    }
+  }, [debouncedQ]);
 
   const close = useCallback(() => {
     setQ('');

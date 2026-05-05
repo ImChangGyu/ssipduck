@@ -3,6 +3,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ratingKeys } from '~/features/rating/api/query-keys';
 import { commentKeys } from '~/features/comment/api/query-keys';
+import { track } from '~/lib/analytics';
 
 interface UpsertRatingPayload {
   aniId: number;
@@ -24,6 +25,9 @@ export function useUpsertRatingMutation() {
 
   return useMutation({
     mutationFn: upsertRating,
+    onSuccess: (_data, { aniId, score }) => {
+      track('rate_ani', { ani_id: aniId, score });
+    },
     onMutate: async ({ aniId, score }) => {
       await queryClient.cancelQueries({ queryKey: ratingKeys.list() });
       const previous = queryClient.getQueryData<{ ratings: { aniId: number; score: number }[] }>(ratingKeys.list());

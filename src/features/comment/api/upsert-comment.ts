@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { commentKeys } from '~/features/comment/api/query-keys';
+import { track } from '~/lib/analytics';
 
 interface UpsertCommentPayload {
   aniId: number;
@@ -25,6 +26,7 @@ export function useUpsertCommentMutation() {
     mutationFn: upsertComment,
     onSuccess: (_data, { aniId }) => {
       queryClient.invalidateQueries({ queryKey: commentKeys.list(aniId) });
+      track('comment_ani', { ani_id: aniId });
     },
   });
 }

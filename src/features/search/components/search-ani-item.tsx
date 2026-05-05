@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { Card } from '~/components/ui/card';
 import { AniItemType } from '~/types/ani';
+import { track } from '~/lib/analytics';
 
 interface SearchAniItemProps {
   ani: AniItemType;
@@ -15,6 +16,7 @@ export default function SearchAniItem({ ani, onClose }: SearchAniItemProps) {
   const pathname = usePathname();
 
   function handleClick() {
+    track('click_ani_item', { ani_id: ani.id, source: 'search' });
     router.push(`${pathname}?ani-id=${ani.id}`, { scroll: false });
     onClose();
   }
