@@ -58,7 +58,6 @@ export default function AniModal({ aniId }: AniModalProps) {
   };
 
   const myComment = user ? (comments.find((c) => c.userId === user.id) ?? null) : null;
-  const otherComments = user ? comments.filter((c) => c.userId !== user.id) : comments;
 
   const hasTrailer = Boolean(ani.trailer?.id);
   const bgImage = ani.bannerImage || ani.coverImage.extraLarge;
@@ -198,10 +197,10 @@ export default function AniModal({ aniId }: AniModalProps) {
                   </span>
                 )}
               </h3>
-              {otherComments.length === 0 && !myComment ? (
+              {comments.length === 0 ? (
                 <p className="text-body-md text-on-surface-variant">아직 댓글이 없습니다.</p>
               ) : (
-                <CommentList comments={otherComments} />
+                <CommentList comments={comments} currentUserId={user?.id} />
               )}
             </div>
           </div>
